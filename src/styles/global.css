@@ -1,0 +1,343 @@
+/* =========================================================
+   global.css — design system + base styles
+   ========================================================= */
+
+/* Self-hosted variable fonts (no Google Fonts CDN at runtime). */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/source-serif-4';
+@import '@fontsource-variable/source-serif-4/wght-italic.css';
+@import '@fontsource-variable/jetbrains-mono';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Design tokens ----------
+   Colors are stored as RGB triples so Tailwind can apply alpha via
+   `text-[color:rgb(var(--rgb-...))]` or via the `colors` extension in
+   tailwind.config.mjs. Hex values are listed in comments for reference.
+*/
+:root {
+  /* paper #FAF7F0  — page background */
+  --rgb-paper: 250 247 240;
+  /* ink #16181C   — primary text */
+  --rgb-ink: 22 24 28;
+  /* cream #F0EDE5 — section background, subtle elevation */
+  --rgb-cream: 240 237 229;
+  /* line #E8E2D5  — hairline rules */
+  --rgb-line: 232 226 213;
+  /* muted #5A5247 — secondary text. AA-passing on cream. */
+  --rgb-muted: 90 82 71;
+  /* burnt #B23B0A — body accent, AA on paper */
+  --rgb-burnt: 178 59 10;
+  /* burnt-strong #C2410C — display headline italic accent */
+  --rgb-burnt-strong: 194 65 12;
+
+  /* Placeholder block (yellow-tinted) */
+  --ph-bg: rgb(250 204 21 / 0.10);
+  --ph-border: rgb(217 119 6 / 0.55);
+  --ph-label: #92400E;
+
+  --bg: rgb(var(--rgb-paper));
+  --fg: rgb(var(--rgb-ink));
+  --line-c: rgb(var(--rgb-line));
+  --muted-c: rgb(var(--rgb-muted));
+  --burnt-c: rgb(var(--rgb-burnt));
+  --burnt-strong-c: rgb(var(--rgb-burnt-strong));
+  --cream-c: rgb(var(--rgb-cream));
+}
+
+.dark {
+  --rgb-paper: 22 24 28;
+  --rgb-ink: 240 237 229;
+  --rgb-cream: 31 33 39;
+  --rgb-line: 42 45 51;
+  --rgb-muted: 166 171 180;
+  --rgb-burnt: 234 88 12;
+  --rgb-burnt-strong: 249 115 22;
+
+  --ph-bg: rgb(250 204 21 / 0.06);
+  --ph-border: rgb(250 204 21 / 0.45);
+  --ph-label: #FCD34D;
+}
+
+/* ---------- Base ---------- */
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+}
+body {
+  font-family: 'Source Serif 4 Variable', Georgia, serif;
+  font-size: 18.5px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.ui   { font-family: 'Inter Variable', Inter, system-ui, sans-serif; }
+.mono { font-family: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace; }
+
+/* ---------- Reusable components ---------- */
+.kicker {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 12px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--muted-c);
+}
+
+.h-display {
+  font-family: 'Source Serif 4 Variable', serif;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+}
+.h-display em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--burnt-strong-c);
+}
+
+.editorial-rule { border: none; border-top: 1px solid var(--line-c); margin: 0; }
+.brain-bg { background: linear-gradient(180deg, var(--bg) 0%, var(--cream-c) 100%); }
+.bg-cream { background: var(--cream-c); }
+
+/* In-prose link with growing underline */
+a.linky {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-c);
+  padding-bottom: 1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+a.linky:hover { color: var(--burnt-c); border-bottom-color: var(--burnt-c); }
+
+/* Magazine-style writing row */
+.mag-row {
+  display: grid;
+  grid-template-columns: 92px 1fr auto;
+  gap: 28px;
+  align-items: baseline;
+  padding: 22px 0;
+  border-top: 1px solid var(--line-c);
+}
+.mag-row:hover .mag-title { color: var(--burnt-c); }
+.mag-row .mag-title {
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  transition: color 0.2s ease;
+}
+
+/* Live status dot — subtle pulse */
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #16a34a;
+  position: relative;
+  opacity: 0.55;
+}
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: #16a34a;
+  opacity: 0.35;
+}
+
+/* PLACEHOLDER block — wraps body copy or pull-quote */
+.ph {
+  background: var(--ph-bg);
+  border-left: 3px solid var(--ph-border);
+  padding: 14px 16px 14px 18px;
+  margin: 0;
+  border-radius: 2px;
+  position: relative;
+}
+.ph::before {
+  content: '[PLACEHOLDER — Aashish will rewrite]';
+  display: block;
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ph-label);
+  margin-bottom: 8px;
+}
+.ph-inline {
+  background: var(--ph-bg);
+  color: var(--ph-label);
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 0.85em;
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px dashed var(--ph-border);
+}
+
+/* Skill column */
+.sk-col h3 {
+  font-family: 'Source Serif 4 Variable', serif;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  margin-bottom: 18px;
+}
+.sk-col ul { list-style: none; padding: 0; margin: 0; }
+.sk-col li {
+  padding: 12px 0;
+  border-top: 1px solid var(--line-c);
+  font-size: 17px;
+  line-height: 1.5;
+}
+.sk-col li:last-child { border-bottom: 1px solid var(--line-c); }
+.sk-col.sk-gaps h3 { color: var(--burnt-strong-c); }
+.sk-col.sk-gaps li { color: var(--muted-c); }
+
+/* Mono pull-quote (used on /experience) */
+.pull {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-c);
+  line-height: 1.7;
+}
+.pull strong { font-weight: 500; color: var(--fg); }
+
+/* Reading layout (post page) */
+.prose-reading {
+  font-family: 'Source Serif 4 Variable', Georgia, serif;
+  font-size: 19px;
+  line-height: 1.75;
+  max-width: 40rem;
+}
+.prose-reading h1, .prose-reading h2, .prose-reading h3 {
+  font-family: 'Source Serif 4 Variable', serif;
+  letter-spacing: -0.015em;
+}
+.prose-reading h2 { font-size: 28px; margin-top: 2em; margin-bottom: 0.5em; line-height: 1.2; }
+.prose-reading h3 { font-size: 22px; margin-top: 1.6em; margin-bottom: 0.4em; line-height: 1.25; }
+.prose-reading p  { margin: 0 0 1.1em; }
+.prose-reading code {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 0.88em;
+  background: var(--cream-c);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.prose-reading pre {
+  background: var(--cream-c);
+  border: 1px solid var(--line-c);
+  padding: 16px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 14px;
+}
+.prose-reading blockquote {
+  border-left: 3px solid var(--burnt-c);
+  margin: 0;
+  padding: 4px 0 4px 20px;
+  color: var(--muted-c);
+  font-style: italic;
+}
+
+/* kbd hint */
+.kbd {
+  font-family: 'JetBrains Mono Variable', monospace;
+  font-size: 10px;
+  padding: 2px 5px;
+  border: 1px solid var(--line-c);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  color: var(--muted-c);
+}
+
+/* nav link */
+.nav-link {
+  color: var(--muted-c);
+  transition: color 0.2s ease;
+}
+.nav-link:hover, .nav-link[aria-current='page'] { color: var(--fg); }
+
+/* Cmdk */
+.cmdk-backdrop {
+  background: rgb(22 24 28 / 0.45);
+  backdrop-filter: blur(6px);
+}
+.dark .cmdk-backdrop { background: rgb(0 0 0 / 0.55); }
+
+::selection { background: rgb(178 59 10 / 0.18); }
+.dark ::selection { background: rgb(234 88 12 / 0.28); }
+
+/* Focus rings (a11y) */
+*:focus-visible {
+  outline: 2px solid var(--burnt-c);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Skip link */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  padding: 8px 12px;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: 'Inter Variable', sans-serif;
+  font-size: 13px;
+  border-radius: 3px;
+  z-index: 100;
+}
+.skip-link:focus { top: 16px; }
+
+/* Animations — gated by reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .fade-up {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.8s ease forwards;
+  }
+  .fade-up.d1 { animation-delay: 0.05s; }
+  .fade-up.d2 { animation-delay: 0.15s; }
+  .fade-up.d3 { animation-delay: 0.25s; }
+  .fade-up.d4 { animation-delay: 0.35s; }
+  @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+  .live-dot::after { animation: pulse 2s ease-out infinite; }
+  @keyframes pulse {
+    0%   { transform: scale(0.7); opacity: 0.5; }
+    70%  { transform: scale(1.4); opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .scroll-prompt { animation: float 2.4s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(4px); }
+  }
+
+  .mag-row { transition: transform 0.25s ease; }
+  .mag-row:hover { transform: translateX(8px); }
+}
+
+/* Astro view transitions — soft cross-fade on navigation */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}

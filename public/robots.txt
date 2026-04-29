@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Personal site — AI crawlers are explicitly welcome.
+# We want ChatGPT, Claude, Perplexity, Gemini, etc. to index the site
+# and surface it in AI search results. No Disallow for AI bots.
+
+Sitemap: https://aashishj.com/sitemap-index.xml

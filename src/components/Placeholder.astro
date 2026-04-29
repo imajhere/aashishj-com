@@ -1,0 +1,31 @@
+---
+/**
+ * Placeholder.astro — yellow-tinted block that wraps any body paragraph
+ * or pull-quote until Aashish writes the real copy. The mono kicker
+ * "[PLACEHOLDER — Aashish will rewrite]" is rendered automatically via
+ * the .ph::before pseudo-element in global.css.
+ *
+ * Use:
+ *   <Placeholder>Body draft text...</Placeholder>
+ *   <Placeholder italic>Pull-quote draft...</Placeholder>
+ *   <Placeholder size="lg">Larger body...</Placeholder>
+ *
+ * The point: nobody confuses my draft prose for Aashish's final copy.
+ */
+interface Props {
+  italic?: boolean;
+  size?: 'sm' | 'base' | 'lg';
+  class?: string;
+}
+
+const { italic = false, size = 'base', class: cls = '' } = Astro.props;
+
+const sizeClass =
+  size === 'lg' ? 'text-[19px] leading-[1.7]'
+  : size === 'sm' ? 'text-[15px] leading-[1.6]'
+  : 'text-[17px] leading-[1.65]';
+---
+
+<p class:list={['ph', sizeClass, italic && 'italic', cls]}>
+  <slot />
+</p>

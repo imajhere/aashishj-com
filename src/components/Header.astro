@@ -1,0 +1,70 @@
+---
+/**
+ * Header.astro — minimal sticky/absolute nav, theme toggle, ⌘K trigger.
+ *
+ * Positioning: when used on the homepage (which has a 90vh hero with no
+ * nav background), set `floating={true}` to make it absolute-over-hero.
+ * Otherwise it sits at the top of the page with a hairline border.
+ */
+interface Props {
+  current?: 'home' | 'experience' | 'projects' | 'skills' | 'fit' | 'writing';
+  floating?: boolean;
+}
+
+const { current = 'home', floating = false } = Astro.props;
+
+const navItems = [
+  { href: '/experience', label: 'Experience', id: 'experience' },
+  { href: '/projects', label: 'Projects', id: 'projects' },
+  { href: '/skills', label: 'Skills', id: 'skills' },
+  { href: '/writing', label: 'Writing', id: 'writing' },
+  { href: '/fit', label: 'Fit', id: 'fit' },
+];
+
+const positionClass = floating
+  ? 'absolute top-0 left-0 right-0 z-30'
+  : 'relative border-b border-line';
+---
+
+<header class:list={[positionClass]}>
+  <div class="max-w-[1240px] mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
+    <a href="/" class="ui font-medium tracking-tight text-[15px]">
+      Aashish Jagini
+    </a>
+    <nav class="hidden md:flex items-center gap-7 ui text-[13.5px]" aria-label="Main">
+      {
+        navItems.map(({ href, label, id }) => (
+          <a
+            href={href}
+            class="nav-link"
+            aria-current={current === id ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="flex items-center gap-3">
+      <button
+        id="cmdk-trigger"
+        class="hidden sm:inline-flex items-center gap-2 ui text-[12px] text-muted hover:text-ink transition"
+        aria-label="Open command palette"
+      >
+        Search <span class="kbd">⌘K</span>
+      </button>
+      <button
+        id="theme-toggle"
+        class="w-7 h-7 grid place-items-center rounded-full hover:bg-cream transition"
+        aria-label="Toggle theme"
+      >
+        <svg id="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+        </svg>
+        <svg id="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="hidden" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

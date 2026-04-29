@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { getCollection } from 'astro:content';
+
+// Show only published posts. Drafts (`draft: true`) remain reachable by direct
+// URL so Aashish can preview the layout, but they don't appear in the index.
+const posts = (await getCollection('writing'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const allDraftPosts = (await getCollection('writing'))
+  .filter((p) => p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+---
+
+<BaseLayout
+  title="Writing — Aashish Jagini"
+  description="Essays on PM tooling, AI, and self-hosted infrastructure."
+  current="writing"
+>
+  <main id="main">
+
+    <section class="min-h-[36vh] flex items-end pb-12">
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-20">
+        <p class="kicker">WRITING · A FEW ESSAYS A YEAR</p>
+        <h1 class="h-display mt-6 text-[44px] sm:text-[60px] lg:text-[72px] max-w-[1100px]">
+          What I'm <em>writing</em> about.
+        </h1>
+        <div class="mt-8 max-w-[640px]">
+          <Placeholder size="lg">
+            One paragraph of intro: how often I publish, what to expect, and where to find me writing elsewhere. Aashish will rewrite.
+          </Placeholder>
+        </div>
+      </div>
+    </section>
+
+    <hr class="editorial-rule" />
+
+    <section class="py-16">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10">
+
+        {posts.length === 0 ? (
+          <div class="max-w-[680px]">
+            <Placeholder size="lg">
+              No posts published yet. The two seed posts (<code class="ph-inline">pm-os</code> and <code class="ph-inline">brain-system</code>) are in draft. Set <code class="ph-inline">draft: false</code> in their frontmatter to publish them here.
+            </Placeholder>
+          </div>
+        ) : (
+          <div class="max-w-[920px]">
+            {posts.map((post, i) => (
+              <a
+                href={`/writing/${post.slug}`}
+                class="mag-row"
+                style={i === posts.length - 1 ? 'border-bottom: 1px solid rgb(var(--rgb-line))' : undefined}
+                data-astro-prefetch
+              >
+                <span class="kicker whitespace-nowrap">{fmt(post.data.pubDate)}</span>
+                <span>
+                  <span class="mag-title block">{post.data.title}</span>
+                  <p class="mt-2 text-[16.5px] text-muted leading-[1.55]">{post.data.description}</p>
+                </span>
+                <span class="ui text-[11px] uppercase tracking-[.14em] text-muted hidden sm:inline">
+                  {post.data.tags[0] ?? <span class="ph-inline">[tag]</span>}
+                </span>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {allDraftPosts.length > 0 && (
+          <div class="mt-16 max-w-[920px] border-t border-dashed border-line pt-10">
+            <p class="kicker mb-4">DRAFTS · NOT YET INDEXED · DIRECT URL ONLY</p>
+            <ul class="ui text-[14px] space-y-2">
+              {allDraftPosts.map((p) => (
+                <li>
+                  <a href={`/writing/${p.slug}`} class="linky">
+                    /writing/{p.slug}
+                  </a>
+                  <span class="text-muted"> — {p.data.title}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-3 text-[12px] text-muted ui">
+              These are reachable for layout preview. They won't render here once <code class="ph-inline">draft: false</code> ships them above.
+            </p>
+          </div>
+        )}
+
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>

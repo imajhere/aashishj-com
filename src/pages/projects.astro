@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BrainStatus from '../components/BrainStatus.astro';
+import Placeholder from '../components/Placeholder.astro';
+
+// Page-level CreativeWork schema for the Brain System project.
+const brainSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  '@id': 'https://aashishj.com/projects#brain',
+  name: 'Brain — personal AI memory',
+  creator: { '@id': 'https://aashishj.com/#person' },
+  description:
+    'A self-hosted MCP server that gives Claude, Cursor, and ChatGPT access to a personal Obsidian vault and 2,400+ scanned documents.',
+  keywords: ['MCP', 'Obsidian', 'personal AI', 'RAG', 'SQLite', 'FTS5', 'sqlite-vec'],
+};
+---
+
+<BaseLayout
+  title="Projects — Aashish Jagini"
+  description="Brain System, 78 Labs, and Team 78 — what I'm building."
+  current="projects"
+  schema={brainSchema}
+>
+  <main id="main">
+
+    <section class="min-h-[34vh] flex items-end pb-10">
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-20">
+        <p class="kicker">PROJECTS · WHAT I'M BUILDING</p>
+        <h1 class="h-display mt-6 text-[40px] sm:text-[56px] lg:text-[64px] max-w-[1100px]">
+          Tools and ventures, <em>three</em> of each kind.
+        </h1>
+      </div>
+    </section>
+
+    <hr class="editorial-rule" />
+
+    <!-- Brain System — gets a wider treatment with live status sidebar -->
+    <section id="brain" class="py-20">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-8 lg:gap-12">
+
+        <div class="col-span-12 lg:col-span-3">
+          <div class="kicker">PROJECT I</div>
+          <div class="ui mt-3 text-[14px]">2025 — present</div>
+          <div class="ui mt-1 text-[13px] text-muted">Self-hosted · Mac Mini</div>
+          <div class="ui mt-3 text-[12px] uppercase tracking-[.14em] text-burntdk">Shipping</div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6 max-w-[640px]">
+          <h2 class="font-serif text-[32px] sm:text-[40px] leading-[1.1] font-medium tracking-tight">
+            Brain <span class="italic font-normal text-muted">— a memory my AI tools can read</span>
+          </h2>
+
+          <div class="mt-8 space-y-4">
+            <Placeholder size="lg">
+              Brain is a small Python server I run on a Mac Mini in my home office. It indexes my Obsidian notes plus 2,400+ OCR'd scanned documents and exposes them through MCP to every AI tool I use. Aashish will rewrite this paragraph with the real story.
+            </Placeholder>
+            <Placeholder size="lg">
+              Memory is the unlock. The thesis paragraph and the "I built it because..." lead are reserved here.
+            </Placeholder>
+            <Placeholder size="sm" italic>
+              SHIPPED · 2,400+ DOCS INDEXED · $0/MO · WHY · OWN YOUR CONTEXT.
+            </Placeholder>
+          </div>
+
+          <div class="mt-10 flex flex-wrap gap-4">
+            <a
+              href="https://github.com/aashishjagini"
+              class="ui inline-flex items-center gap-2 text-[14px] border-b border-burnt text-burnt pb-1 hover:opacity-70 transition"
+            >
+              View on GitHub <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href="#"
+              class="ui inline-flex items-center gap-2 text-[14px] border-b border-line pb-1 hover:border-burnt hover:text-burnt transition"
+            >
+              MCP integration notes
+            </a>
+          </div>
+        </div>
+
+        <aside class="col-span-12 lg:col-span-3 lg:pt-2">
+          <BrainStatus variant="project" />
+          <div class="mt-6 text-[12px] mono text-muted leading-[1.6]">
+            <div class="kicker mb-2">Stack</div>
+            <p class="ui text-[13px] leading-[1.7]">
+              Python · FastAPI · SQLite + sqlite-vec · sentence-transformers (BGE-M3) · cross-encoder rerank · Cloudflare Tunnel · MCP · launchd
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <hr class="editorial-rule" />
+
+    <!-- 78 Labs -->
+    <ProjectCard
+      ordinal="II"
+      years="2024 — present"
+      location="India · DTC"
+      status="Shipping"
+      title="78 Labs"
+      tagline="— anhydrous mineral sunscreen"
+      anchor="78-labs"
+      link="https://78labs.in"
+      linkLabel="Visit 78labs.in"
+    >
+      <Placeholder slot="body" size="lg">
+        Co-founded with my wife. The product story, formulation lock, and launch
+        notes go here. Aashish will write.
+      </Placeholder>
+      <Placeholder slot="pull" size="sm" italic>
+        SHIPPED · [WHAT] · BUILDING · A BRAND THAT'S OURS.
+      </Placeholder>
+    </ProjectCard>
+
+    <!-- Team 78 -->
+    <ProjectCard
+      ordinal="III"
+      years="2025 — present"
+      location="NYC · Gov-tech"
+      status="Building"
+      title="Team 78"
+      tagline="— MWBE-certified consulting"
+      anchor="team-78"
+    >
+      <Placeholder slot="body" size="lg">
+        MWBE-certified gov-tech consulting practice. Built on a decade of NYC
+        agency relationships. Aashish will write.
+      </Placeholder>
+      <Placeholder slot="pull" size="sm" italic>
+        SHIPPED · [WHAT] · DEFINITION OF SUCCESS · IT NEVER NEEDS A TEAM.
+      </Placeholder>
+    </ProjectCard>
+
+  </main>
+</BaseLayout>

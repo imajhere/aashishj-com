@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#FAF7F0"/>
+  <text x="80" y="120" font-family="JetBrains Mono, monospace" font-size="22" letter-spacing="3" fill="#5A5247">AASHISH JAGINI · FRISCO, TX</text>
+
+  <text x="80" y="290" font-family="Source Serif 4, Georgia, serif" font-size="76" font-weight="400" fill="#16181C">PM at a large consulting firm.</text>
+  <text x="80" y="380" font-family="Source Serif 4, Georgia, serif" font-size="76" font-weight="500" font-style="italic" fill="#C2410C">Builder<tspan fill="#16181C" font-style="normal" font-weight="400"> of small things that ship.</tspan></text>
+
+  <text x="80" y="510" font-family="Source Serif 4, Georgia, serif" font-size="28" fill="#5A5247">Engineer who became a PM. PM on an internal platform team.</text>
+  <text x="80" y="548" font-family="Source Serif 4, Georgia, serif" font-size="28" fill="#5A5247">Self-hosted AI memory, a few essays a year, $0/mo infrastructure.</text>
+
+  <text x="80" y="595" font-family="JetBrains Mono, monospace" font-size="18" letter-spacing="3" fill="#5A5247">AASHISHJ.COM</text>
+
+  <line x1="80" y1="180" x2="240" y2="180" stroke="#C2410C" stroke-width="3"/>
+</svg>

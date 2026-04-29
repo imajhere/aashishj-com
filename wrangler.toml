@@ -1,0 +1,16 @@
+# wrangler.toml — STUB for the future Cloudflare Worker that will power
+# the AI features (Ask AI About Me chat, /fit JD assessment).
+#
+# This file is intentionally commented-out for the foundation pass.
+# When pass 2 lands, fill these in and run `wrangler deploy`.
+#
+# name = "aashishj-com-ai"
+# main = "src/worker/index.ts"
+# compatibility_date = "2026-04-29"
+#
+# [ai]
+# binding = "AI"
+#
+# [[routes]]
+# pattern = "aashishj.com/api/*"
+# zone_name = "aashishj.com"

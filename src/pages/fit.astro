@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Placeholder from '../components/Placeholder.astro';
+---
+
+<BaseLayout
+  title="Fit — Aashish Jagini"
+  description="Paste a job description, get an honest fit assessment. Tool launching soon."
+  current="fit"
+>
+  <main id="main">
+
+    <section class="min-h-[40vh] flex items-end pb-12">
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-20">
+        <p class="kicker">FIT · COMING SOON</p>
+        <h1 class="h-display mt-6 text-[44px] sm:text-[60px] lg:text-[72px] max-w-[1100px]">
+          Paste a job description. <em>I'll</em> tell you if it fits.
+        </h1>
+        <div class="mt-8 max-w-[640px]">
+          <Placeholder size="lg">
+            One-paragraph explanation of how this works, what the model uses for grounding, and what an honest "fit" answer looks like. Aashish will write.
+          </Placeholder>
+        </div>
+      </div>
+    </section>
+
+    <hr class="editorial-rule" />
+
+    <!-- UI stub: textarea + disabled submit + "launching soon" panel -->
+    <section class="py-20">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-10">
+
+        <div class="col-span-12 lg:col-span-7 max-w-[680px]">
+          <label for="jd" class="kicker block mb-3">PASTE A JOB DESCRIPTION</label>
+          <textarea
+            id="jd"
+            rows="14"
+            disabled
+            placeholder="Paste the JD here when this tool ships."
+            class="ui w-full bg-paper border border-line rounded-md p-4 text-[15px] leading-[1.6] focus:outline-none focus:border-burnt disabled:opacity-60 disabled:cursor-not-allowed"
+          ></textarea>
+          <button
+            type="button"
+            disabled
+            class="mt-4 ui inline-flex items-center gap-2 px-5 py-3 border border-line rounded-md text-[14px] text-muted disabled:cursor-not-allowed"
+          >
+            Assess fit <span class="kbd ml-1">SOON</span>
+          </button>
+        </div>
+
+        <aside class="col-span-12 lg:col-span-5">
+          <div class="border border-line rounded-md p-6 bg-cream">
+            <p class="kicker">Tool launching soon</p>
+            <h2 class="font-serif text-[24px] mt-4 mb-3 leading-[1.3] font-medium">
+              Want to be the first to try it?
+            </h2>
+            <Placeholder size="sm">
+              Two-line description of what early access looks like — when it ships, what to expect. Aashish will write.
+            </Placeholder>
+            <form class="mt-6 flex flex-col sm:flex-row gap-2">
+              <label for="email" class="sr-only">Your email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                disabled
+                class="ui flex-1 bg-paper border border-line rounded-md px-3 py-2 text-[14px] focus:outline-none focus:border-burnt disabled:opacity-60"
+              />
+              <button
+                type="button"
+                disabled
+                class="ui px-4 py-2 border border-burnt text-burnt rounded-md text-[14px] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Notify me
+              </button>
+            </form>
+            <p class="mt-3 text-[12px] text-muted ui">
+              Form is a stub for now — wired up when /fit launches.
+            </p>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>

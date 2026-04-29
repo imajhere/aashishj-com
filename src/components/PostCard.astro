@@ -1,0 +1,31 @@
+---
+/**
+ * PostCard.astro — single magazine row used on / and /writing.
+ * Description rendered through <Placeholder> until Aashish writes posts.
+ */
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  href: string;
+  date: string;        // pre-formatted, e.g. "28 Apr"
+  readingTime: string; // e.g. "8 min"
+  title: string;
+}
+
+const { href, date, readingTime, title } = Astro.props;
+---
+
+<a href={href} class="mag-row" data-astro-prefetch>
+  <span class="kicker whitespace-nowrap">{date} · {readingTime}</span>
+  <span>
+    <span class="mag-title block">{title}</span>
+    <div class="mt-2">
+      <Placeholder size="sm">
+        <slot />
+      </Placeholder>
+    </div>
+  </span>
+  <span class="ui text-[11px] uppercase tracking-[.14em] text-muted hidden sm:inline">
+    <span class="ph-inline">[tags]</span>
+  </span>
+</a>

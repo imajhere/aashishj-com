@@ -1,0 +1,72 @@
+---
+/**
+ * ProjectCard.astro — single project on /projects.
+ */
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  ordinal: string;       // "I", "II", "III"
+  years: string;         // "2025 — present"
+  location: string;      // "Self-hosted · Mac Mini"
+  status: string;        // "Shipping" / "Building" / "Slow burn"
+  title: string;         // "Brain"
+  tagline?: string;      // "— a memory my AI tools can read"
+  link?: string;         // optional external href
+  linkLabel?: string;
+  anchor?: string;       // anchor id for in-page links (e.g. "brain")
+}
+
+const {
+  ordinal,
+  years,
+  location,
+  status,
+  title,
+  tagline,
+  link,
+  linkLabel,
+  anchor,
+} = Astro.props;
+---
+
+<article id={anchor} class="py-16 border-t border-line first:border-t-0">
+  <div class="grid grid-cols-12 gap-6 lg:gap-10">
+    <div class="col-span-12 lg:col-span-3">
+      <div class="kicker">PROJECT {ordinal}</div>
+      <div class="ui mt-3 text-[14px]">{years}</div>
+      <div class="ui mt-1 text-[13px] text-muted">{location}</div>
+      <div class="ui mt-3 text-[12px] uppercase tracking-[.14em] text-burntdk">{status}</div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-9 max-w-[720px]">
+      <h2 class="font-serif text-[32px] sm:text-[40px] leading-[1.1] font-medium tracking-tight">
+        {title}
+        {tagline && <span class="italic font-normal text-muted"> {tagline}</span>}
+      </h2>
+
+      <div class="mt-8 space-y-4">
+        <Placeholder size="lg">
+          <slot name="body">
+            Project overview. Aashish will rewrite — what it is, why it exists, what it does today.
+          </slot>
+        </Placeholder>
+
+        <Placeholder size="sm" italic>
+          <slot name="pull">
+            SHIPPED · [WHAT] · WHY · [REASON].
+          </slot>
+        </Placeholder>
+      </div>
+
+      <slot name="extra" />
+
+      {link && (
+        <div class="mt-10">
+          <a href={link} class="ui inline-flex items-center gap-2 text-[14px] border-b border-burnt text-burnt pb-1 hover:opacity-70 transition">
+            {linkLabel ?? 'Visit'} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      )}
+    </div>
+  </div>
+</article>

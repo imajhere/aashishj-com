@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Placeholder from '../components/Placeholder.astro';
+
+const strong = [
+  'Enterprise PM at scale',
+  'Spec-driven development with AI',
+  'LLM product integration',
+  'Cross-team leadership',
+  'Building AI infra (MCP, RAG)',
+];
+const moderate = [
+  'Frontend (React, Astro)',
+  'Data engineering (SQL, Snowflake)',
+  'Government IT procurement',
+  'Brand voice and copywriting',
+  'Technical writing for non-engineers',
+];
+const gaps = [
+  'Mobile native (iOS/Android)',
+  'Formal ML / model training',
+  'Hardware design',
+  'Game design',
+  'Distributed systems at FAANG scale',
+];
+---
+
+<BaseLayout
+  title="Skills — Aashish Jagini"
+  description="What I'm strong at, moderate at, and not at. The honest version, including the column most personal sites omit."
+  current="skills"
+>
+  <main id="main">
+
+    <section class="min-h-[42vh] flex items-end pb-12">
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-20">
+        <p class="kicker">SKILLS · STRONG · MODERATE · GAPS</p>
+        <h1 class="h-display mt-6 text-[44px] sm:text-[60px] lg:text-[72px] max-w-[1100px]">
+          The <em>honest</em> version.
+        </h1>
+        <div class="mt-8 max-w-[640px]">
+          <Placeholder size="lg">
+            Each item below has evidence. The third column — Gaps — exists because the cost of getting hired into the wrong role is much higher than the cost of being passed over for the wrong one. Aashish will rewrite this lede.
+          </Placeholder>
+        </div>
+      </div>
+    </section>
+
+    <hr class="editorial-rule" />
+
+    <section class="py-20">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-14">
+
+        <div class="sk-col">
+          <h3>Strong</h3>
+          <ul>
+            {strong.map((s) => <li>{s}</li>)}
+          </ul>
+        </div>
+
+        <div class="sk-col">
+          <h3>Moderate</h3>
+          <ul>
+            {moderate.map((s) => <li>{s}</li>)}
+          </ul>
+        </div>
+
+        <div class="sk-col sk-gaps">
+          <h3>Gaps</h3>
+          <ul>
+            {gaps.map((s) => <li>{s}</li>)}
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="editorial-rule" />
+
+    <section class="py-20 bg-cream">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10">
+        <p class="kicker">A note on column III</p>
+        <div class="mt-6 max-w-[680px]">
+          <Placeholder size="lg">
+            Most personal sites soften this column or leave it out. Aashish will write the closing note here in his own voice.
+          </Placeholder>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>

@@ -1,0 +1,72 @@
+---
+/**
+ * ChapterCard.astro — one chapter on /experience.
+ *
+ * Includes a collapsible "AI Context" expander. The expander is empty
+ * until Aashish writes material; the slot is reserved.
+ */
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  /** Chapter ordinal — "I", "II", ... displayed as the kicker prefix. */
+  ordinal: string;
+  /** Year span as displayed (e.g. "2020 — present"). */
+  years: string;
+  /** Location chip (e.g. "Frisco, TX · PM2"). */
+  location: string;
+  /** Org / role label inside the role-name italics (e.g. "McKinsey · Platform"). */
+  org: string;
+  /** Headline title (e.g. "Senior PM"). */
+  title: string;
+  /** Eyebrow before the title. Defaults to "Chapter {ordinal}". */
+  eyebrow?: string;
+}
+
+const { ordinal, years, location, org, title, eyebrow } = Astro.props;
+const computedEyebrow = eyebrow ?? `CHAPTER ${ordinal}`;
+---
+
+<article class="py-14 border-t border-line first:border-t-0">
+  <div class="grid grid-cols-12 gap-6 lg:gap-10">
+    <div class="col-span-12 lg:col-span-3">
+      <div class="kicker">{computedEyebrow}</div>
+      <div class="ui mt-3 text-[14px]">{years}</div>
+      <div class="ui mt-1 text-[13px] text-muted">{location}</div>
+    </div>
+
+    <div class="col-span-12 lg:col-span-9 max-w-[720px]">
+      <h2 class="font-serif text-[28px] sm:text-[34px] leading-[1.15] font-medium tracking-tight">
+        {title} <span class="italic font-normal text-muted">— {org}</span>
+      </h2>
+
+      <div class="mt-6 space-y-4">
+        <Placeholder size="lg">
+          <slot name="summary">
+            One-paragraph "what shipped" summary. Aashish will replace this with concrete numbers, named ships, and the through-line.
+          </slot>
+        </Placeholder>
+
+        <Placeholder size="sm">
+          <slot name="pull">
+            SHIPPED · [WHAT] · LEARNED · [SOMETHING SPECIFIC].
+          </slot>
+        </Placeholder>
+      </div>
+
+      <details class="mt-8 group">
+        <summary class="cursor-pointer ui text-[12.5px] uppercase tracking-[.14em] text-muted hover:text-burnt transition inline-flex items-center gap-2">
+          <span class="inline-block w-3 transition-transform group-open:rotate-90" aria-hidden="true">▸</span>
+          AI Context
+          <span class="ph-inline">[empty]</span>
+        </summary>
+        <div class="mt-4 pl-5">
+          <Placeholder size="sm" italic>
+            <slot name="ai-context">
+              Reserved for richer per-chapter context that the future "Ask AI About Me" feature will use to ground answers. Empty for now.
+            </slot>
+          </Placeholder>
+        </div>
+      </details>
+    </div>
+  </div>
+</article>

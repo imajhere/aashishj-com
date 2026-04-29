@@ -1,0 +1,129 @@
+---
+/**
+ * PostLayout.astro — reading layout for /writing/[slug] pages.
+ *
+ * Owns: clean prose typography, reading-time estimate, dates, share links,
+ * Article JSON-LD. Wraps post body via <slot />.
+ */
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'writing'>;
+  /** Reading time in minutes, computed from word count. */
+  readingMinutes: number;
+}
+
+const { post, readingMinutes } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, ogImage } = post.data;
+const canonical = `https://aashishj.com/writing/${post.slug}`;
+
+const fmtFull = (d: Date) =>
+  d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  author: { '@id': 'https://aashishj.com/#person' },
+  publisher: { '@id': 'https://aashishj.com/#person' },
+  mainEntityOfPage: canonical,
+  keywords: tags,
+};
+
+// Pre-encoded share URLs
+const enc = encodeURIComponent;
+const shareTwitter = `https://twitter.com/intent/tweet?text=${enc(title)}&url=${enc(canonical)}&via=aashishjagini`;
+const shareLinkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${enc(canonical)}`;
+---
+
+<BaseLayout
+  title={`${title} — Aashish Jagini`}
+  description={description}
+  current="writing"
+  ogImage={ogImage}
+  ogType="article"
+  schema={articleSchema}
+>
+  <main id="main">
+
+    <article class="max-w-[760px] mx-auto px-6 lg:px-10 pt-20 pb-32">
+
+      <p class="kicker">
+        WRITING · {fmtFull(pubDate)} · {readingMinutes} MIN READ
+      </p>
+
+      <h1 class="h-display mt-6 text-[40px] sm:text-[52px] lg:text-[58px] max-w-[720px]">
+        {title}
+      </h1>
+
+      <p class="mt-6 text-[19px] text-muted italic max-w-[640px] leading-[1.55]">
+        {description}
+      </p>
+
+      {tags.length > 0 && (
+        <div class="mt-8 flex flex-wrap gap-2">
+          {tags.map((t) => (
+            <span class="ui text-[11px] uppercase tracking-[.14em] text-muted border border-line rounded-full px-3 py-1">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <hr class="editorial-rule mt-10 mb-10" />
+
+      <div class="prose-reading">
+        <slot />
+      </div>
+
+      <hr class="editorial-rule mt-16 mb-8" />
+
+      <!-- Share links -->
+      <div class="flex flex-wrap items-center gap-4 ui text-[13px]">
+        <span class="kicker">Share</span>
+        <a href={shareTwitter} target="_blank" rel="noopener" class="linky">X</a>
+        <a href={shareLinkedIn} target="_blank" rel="noopener" class="linky">LinkedIn</a>
+        <button
+          type="button"
+          id="copy-link-btn"
+          data-url={canonical}
+          class="linky cursor-pointer bg-transparent border-0 p-0 ui text-[13px]"
+        >
+          Copy link
+        </button>
+        {updatedDate && (
+          <span class="ml-auto kicker">
+            UPDATED · {fmtFull(updatedDate)}
+          </span>
+        )}
+      </div>
+
+    </article>
+
+  </main>
+
+  <script is:inline>
+    (function () {
+      function bind() {
+        const b = document.getElementById('copy-link-btn');
+        if (!b || b.dataset.bound) return;
+        b.dataset.bound = '1';
+        b.addEventListener('click', function () {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(b.dataset.url).then(function () {
+              const original = b.textContent;
+              b.textContent = 'Copied';
+              setTimeout(function () { b.textContent = original; }, 1400);
+            });
+          }
+        });
+      }
+      bind();
+      document.addEventListener('astro:page-load', bind);
+    })();
+  </script>
+</BaseLayout>

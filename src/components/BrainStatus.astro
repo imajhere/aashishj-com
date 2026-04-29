@@ -1,0 +1,33 @@
+---
+/**
+ * BrainStatus.astro — the live status block (used on / and /projects).
+ *
+ * Live values (memory, last capture, uptime) start as `[live]` placeholder
+ * pills and stay that way until the production build wires the fetch
+ * to brain.aashishj.com. Tunnel and Cost are real and stay.
+ *
+ * Variant `homepage` sits inside the Brain editorial spread on /, with the
+ * "BRAIN — APR 2026" eyebrow. Variant `project` is the wider treatment
+ * used on /projects/#brain detail block.
+ */
+interface Props {
+  variant?: 'homepage' | 'project';
+}
+
+const { variant = 'homepage' } = Astro.props;
+const heading = variant === 'homepage' ? 'BRAIN — APR 2026' : 'STATUS';
+---
+
+<div class="border-t border-line pt-6">
+  <h3 class="kicker mb-4">{heading}</h3>
+  <dl class="mono text-[12px] leading-[1.7] text-muted space-y-2">
+    <div class="flex justify-between"><dt>Memory</dt><dd><span class="ph-inline">[live]</span></dd></div>
+    <div class="flex justify-between"><dt>Last capture</dt><dd><span class="ph-inline">[live]</span></dd></div>
+    <div class="flex justify-between"><dt>Uptime</dt><dd><span class="ph-inline">[live]</span></dd></div>
+    <div class="flex justify-between"><dt>Tunnel</dt><dd class="text-ink">brain.aashishj.com</dd></div>
+    <div class="flex justify-between"><dt>Cost</dt><dd class="text-ink">$0/mo</dd></div>
+    {variant === 'project' && (
+      <div class="flex justify-between"><dt>Version</dt><dd class="text-ink">v2.4.1</dd></div>
+    )}
+  </dl>
+</div>

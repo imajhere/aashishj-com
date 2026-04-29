@@ -1,0 +1,284 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Placeholder from '../components/Placeholder.astro';
+import BrainStatus from '../components/BrainStatus.astro';
+import { getCollection } from 'astro:content';
+
+// Two most recent published-or-draft posts for the writing block
+const allPosts = await getCollection('writing');
+const recentPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 2);
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
+---
+
+<BaseLayout
+  title="Aashish Jagini — PM, builder, self-hosted AI memory"
+  description="Aashish Jagini — engineer who became a PM. PM on an internal platform team at a large management consulting firm. Self-hosted AI memory and a few essays a year about PM and AI tooling."
+  current="home"
+  floatingHeader={true}
+  ogType="profile"
+>
+  <main id="main">
+
+    <!-- ============================================================
+         HERO. Employer masked. Subhead is body copy → Placeholder.
+         Stats strip: DAY (real), BRAIN ([live]), WRITING ([live]),
+         EMAIL (real). No green dot on BRAIN — value is placeholder
+         per the polish item; dot would imply liveness.
+         ============================================================ -->
+    <section class="min-h-[88vh] flex flex-col justify-between" aria-labelledby="hero-h">
+      <div class="flex-1 flex items-center">
+        <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-32">
+          <p class="kicker fade-up">AASHISH JAGINI · FRISCO, TX</p>
+
+          <h1
+            id="hero-h"
+            class="h-display fade-up d1 mt-4 text-[44px] sm:text-[64px] lg:text-[84px] max-w-[1100px]"
+          >
+            PM at a large consulting firm. <em>Builder</em> of small things that ship.
+          </h1>
+
+          <div class="fade-up d2 mt-10 max-w-[640px]">
+            <Placeholder size="lg">
+              Aashish Jagini — engineer who became a PM. PM on an internal platform team at a large management consulting firm. I built a self-hosted AI memory I use daily, and I write a few essays a year about PM and AI tooling.
+            </Placeholder>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pb-12 flex items-end justify-between fade-up d4">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-12 text-[12.5px]">
+          <div>
+            <div class="kicker mb-1">Day</div>
+            <div class="ui">Platform PM</div>
+          </div>
+          <div>
+            <div class="kicker mb-1">Brain</div>
+            <div class="ui">
+              <span class="ph-inline">[live]</span>
+            </div>
+          </div>
+          <div>
+            <div class="kicker mb-1">Writing</div>
+            <div class="ui"><span class="ph-inline">[live]</span></div>
+          </div>
+          <div>
+            <div class="kicker mb-1">Email</div>
+            <div class="ui">
+              <a class="linky" href="mailto:aashish@aashishj.com">aashish@aashishj.com</a>
+            </div>
+          </div>
+        </div>
+        <div class="ui text-[11px] tracking-[.16em] uppercase text-muted hidden lg:flex items-center gap-3">
+          <span>Read on</span>
+          <span class="scroll-prompt inline-block" aria-hidden="true">↓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION I — Brain. "BRAIN — APR 2026" eyebrow lives inside
+         <BrainStatus />. Body copy + pull-quote wrapped as placeholders.
+         ============================================================ -->
+    <hr class="editorial-rule" />
+    <section class="brain-bg min-h-[84vh] flex items-center" aria-labelledby="brain-h">
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 py-32 grid grid-cols-12 gap-10 lg:gap-16">
+
+        <div class="col-span-12 lg:col-span-1 hidden lg:block">
+          <div class="kicker">I.</div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-7">
+          <p class="kicker">Section I · The thing on my desk</p>
+
+          <h2
+            id="brain-h"
+            class="h-display mt-6 text-[36px] sm:text-[52px] lg:text-[60px] leading-[1.05] max-w-[760px]"
+          >
+            I built a <em>memory</em> my AI tools can read.
+          </h2>
+
+          <div class="mt-10 max-w-[620px] space-y-4">
+            <Placeholder size="lg">
+              As of April 2026, Aashish runs Brain — a self-hosted memory server on a Mac Mini. Hybrid search over an Obsidian vault and 2,400+ OCR'd PDFs, using <span class="mono text-[16px]">SQLite FTS5</span> with vector embeddings, reranked. Every AI tool he uses (Claude, Cursor, ChatGPT) reads from it through MCP. It costs $0 a month.
+            </Placeholder>
+            <Placeholder size="lg" italic>
+              The bet: in 2026, the cheapest edge is a memory your AI tools can search. I built mine. It costs nothing.
+            </Placeholder>
+          </div>
+
+          <div class="mt-12 flex flex-wrap gap-4">
+            <a
+              href="/projects#brain"
+              class="ui inline-flex items-center gap-2 text-[14px] border-b border-burnt text-burnt pb-1 hover:opacity-70 transition"
+              data-astro-prefetch
+            >
+              Read the technical writeup <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href="#"
+              class="ui inline-flex items-center gap-2 text-[14px] border-b border-line pb-1 hover:border-burnt hover:text-burnt transition"
+            >
+              MCP integration notes
+            </a>
+          </div>
+        </div>
+
+        <aside class="col-span-12 lg:col-span-4 lg:pt-10" aria-labelledby="brain-status-h">
+          <BrainStatus variant="homepage" />
+          <div class="mt-8">
+            <Placeholder size="sm" italic>
+              Boring on purpose. The cleverness is that there is nothing clever — no agent framework, no $400/month vector DB. Just hybrid search done right.
+            </Placeholder>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION II — Recent writing. Two seed posts. Tags placeholder.
+         Descriptions pulled from MDX frontmatter and wrapped in
+         Placeholder by <PostCard>.
+         ============================================================ -->
+    <hr class="editorial-rule" />
+    <section class="py-32" aria-labelledby="wri-h">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-10 lg:gap-16">
+
+        <div class="col-span-12 lg:col-span-1 hidden lg:block">
+          <div class="kicker">II.</div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-11">
+          <div class="flex items-baseline justify-between flex-wrap gap-4">
+            <div>
+              <p class="kicker">Section II · Recent writing</p>
+              <h2 id="wri-h" class="h-display mt-6 text-[36px] sm:text-[44px] leading-[1.1] max-w-[820px]">
+                What I'm <em>writing</em> about.
+              </h2>
+            </div>
+            <a href="/writing" class="ui text-[13.5px] text-muted hover:text-burnt transition" data-astro-prefetch>
+              All writing →
+            </a>
+          </div>
+
+          <div class="mt-16 max-w-[920px]">
+            {
+              recentPosts.map((post, i) => (
+                <a
+                  href={`/writing/${post.slug}`}
+                  class="mag-row"
+                  style={i === recentPosts.length - 1 ? 'border-bottom: 1px solid rgb(var(--rgb-line))' : undefined}
+                  data-astro-prefetch
+                >
+                  <span class="kicker whitespace-nowrap">
+                    {fmtDate(post.data.pubDate)} · {readingTime(post.slug)}
+                  </span>
+                  <span>
+                    <span class="mag-title block">{post.data.title}</span>
+                    <div class="mt-2">
+                      <Placeholder size="sm">{post.data.description}</Placeholder>
+                    </div>
+                  </span>
+                  <span class="ui text-[11px] uppercase tracking-[.14em] text-muted hidden sm:inline">
+                    <span class="ph-inline">[tags]</span>
+                  </span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION III — Skills (HOMEPAGE: two columns + link to /skills).
+         Per Aashish's sign-off: Strong + Moderate only here; full
+         three-column grid (incl. Gaps) lives at /skills. The
+         "What I'm honest about not knowing →" link is what makes
+         the section II headline's second sentence land.
+         ============================================================ -->
+    <hr class="editorial-rule" />
+    <section class="py-32 bg-cream" aria-labelledby="sk-h">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-10 lg:gap-16">
+
+        <div class="col-span-12 lg:col-span-1 hidden lg:block">
+          <div class="kicker">III.</div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-11">
+          <p class="kicker">Section III · Skills</p>
+          <h2 id="sk-h" class="h-display mt-6 text-[36px] sm:text-[44px] leading-[1.1] max-w-[820px]">
+            Where I <em>add</em> the most. And where I don't.
+          </h2>
+
+          <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 max-w-[840px]">
+            <div class="sk-col">
+              <h3>Strong</h3>
+              <ul>
+                <li>Enterprise PM at scale</li>
+                <li>Spec-driven development with AI</li>
+                <li>LLM product integration</li>
+                <li>Cross-team leadership</li>
+                <li>Building AI infra (MCP, RAG)</li>
+              </ul>
+            </div>
+            <div class="sk-col">
+              <h3>Moderate</h3>
+              <ul>
+                <li>Frontend (React, Astro)</li>
+                <li>Data engineering (SQL, Snowflake)</li>
+                <li>Government IT procurement</li>
+                <li>Brand voice and copywriting</li>
+                <li>Technical writing for non-engineers</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="mt-12">
+            <a
+              href="/skills"
+              class="linky ui text-[15px]"
+              data-astro-prefetch
+            >
+              What I'm honest about not knowing →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECTION IV — Reach out. Demoted, single short paragraph.
+         No two-column structure. No "reply within a week" line.
+         Last content section before the footer.
+         ============================================================ -->
+    <hr class="editorial-rule" />
+    <section class="py-28" aria-labelledby="reach-h">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-10 lg:gap-16">
+
+        <div class="col-span-12 lg:col-span-1 hidden lg:block">
+          <div class="kicker">IV.</div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-11 max-w-[700px]">
+          <p class="kicker">Section IV · Reach out</p>
+          <h2 id="reach-h" class="h-display mt-6 text-[28px] sm:text-[34px] leading-[1.15]">
+            If something here <em>resonates.</em>
+          </h2>
+
+          <div class="mt-8">
+            <Placeholder size="lg">
+              I'm always up for conversations with PMs and operators building on top of LLMs. The best way to reach me is <a class="linky" href="mailto:aashish@aashishj.com">aashish@aashishj.com</a>.
+            </Placeholder>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>

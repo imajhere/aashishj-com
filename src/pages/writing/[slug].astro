@@ -1,0 +1,29 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  // Render every post (including drafts) so direct-URL preview works.
+  // The /writing index hides drafts; only direct URLs reach them.
+  const posts = await getCollection('writing');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'writing'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// Reading time: simple word count / 200 wpm
+const wordCount = post.body.split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.round(wordCount / 200));
+---
+
+<PostLayout post={post} readingMinutes={readingMinutes}>
+  <Content />
+</PostLayout>

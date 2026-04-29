@@ -1,0 +1,160 @@
+---
+/**
+ * CommandPalette.astro — ⌘K palette. Vanilla JS, no React island.
+ *
+ * Item list is hard-coded for now; can become dynamic once the writing
+ * collection is large enough to surface posts in the palette.
+ */
+---
+
+<div
+  id="cmdk"
+  class="fixed inset-0 z-50 hidden cmdk-backdrop"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="cmdk-title"
+>
+  <h2 id="cmdk-title" class="sr-only">Command palette</h2>
+  <div class="absolute inset-0" data-cmdk-close></div>
+  <div class="relative max-w-[560px] mx-auto mt-[14vh] bg-paper border border-line rounded-md shadow-2xl overflow-hidden">
+    <div class="flex items-center gap-2 px-4 py-3 border-b border-line">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" />
+      </svg>
+      <input
+        id="cmdk-input"
+        type="text"
+        placeholder="Jump to…"
+        class="ui flex-1 bg-transparent outline-none text-[14px] placeholder:text-muted"
+        autocomplete="off"
+      />
+      <span class="kbd">ESC</span>
+    </div>
+    <div id="cmdk-list" class="max-h-[60vh] overflow-y-auto py-1 ui"></div>
+    <div class="flex items-center justify-between px-4 py-2 border-t border-line ui text-[11px] text-muted">
+      <span>
+        <span class="kbd">↑↓</span> navigate
+        <span class="kbd ml-1">⏎</span> select
+      </span>
+      <span class="mono">aashishj.com</span>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    const items = [
+      { type: 'page',   label: 'Home',       hint: 'GO',   href: '/' },
+      { type: 'page',   label: 'Experience', hint: 'GO',   href: '/experience' },
+      { type: 'page',   label: 'Projects',   hint: 'GO',   href: '/projects' },
+      { type: 'page',   label: 'Skills',     hint: 'GO',   href: '/skills' },
+      { type: 'page',   label: 'Writing',    hint: 'GO',   href: '/writing' },
+      { type: 'page',   label: 'Fit',        hint: 'GO',   href: '/fit' },
+      { type: 'action', label: 'Toggle theme', hint: 'RUN',  action: 'toggle-theme' },
+      { type: 'action', label: 'Copy email',   hint: 'COPY', action: 'copy-email', value: 'aashish@aashishj.com' },
+    ];
+
+    const wrap = document.getElementById('cmdk');
+    const input = document.getElementById('cmdk-input');
+    const list = document.getElementById('cmdk-list');
+    const trigger = document.getElementById('cmdk-trigger');
+    if (!wrap || !input || !list) return;
+
+    let active = 0;
+    let filtered = items.slice();
+    let lastFocus = null;
+
+    function open() {
+      lastFocus = document.activeElement;
+      wrap.classList.remove('hidden');
+      input.value = '';
+      filtered = items.slice();
+      active = 0;
+      render();
+      setTimeout(() => input.focus(), 10);
+    }
+    function close() {
+      wrap.classList.add('hidden');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function toggle() {
+      wrap.classList.contains('hidden') ? open() : close();
+    }
+
+    function render() {
+      list.innerHTML = '';
+      if (filtered.length === 0) {
+        list.innerHTML =
+          '<div class="px-4 py-8 text-center text-[12px] uppercase tracking-wider text-muted">No results</div>';
+        return;
+      }
+      filtered.forEach(function (it, i) {
+        const row = document.createElement('div');
+        row.className = 'flex items-center gap-3 px-4 py-2.5 cursor-pointer';
+        row.style.background = i === active ? 'rgb(var(--rgb-cream))' : '';
+        row.innerHTML =
+          '<span class="text-[10px] uppercase tracking-[.14em] text-muted w-14">' + it.type + '</span>' +
+          '<span class="text-[14px] flex-1">' + it.label + '</span>' +
+          '<span class="kbd">' + it.hint + '</span>';
+        row.addEventListener('mouseenter', function () { active = i; render(); });
+        row.addEventListener('click', function () { execute(it); });
+        list.appendChild(row);
+      });
+    }
+
+    function filter(q) {
+      q = q.trim().toLowerCase();
+      filtered = !q
+        ? items.slice()
+        : items.filter(function (it) {
+            return it.label.toLowerCase().includes(q) || it.type.includes(q);
+          });
+      active = 0;
+      render();
+    }
+
+    function execute(it) {
+      if (it.action === 'toggle-theme') {
+        document.getElementById('theme-toggle').click();
+        close();
+      } else if (it.action === 'copy-email') {
+        if (navigator.clipboard) navigator.clipboard.writeText(it.value);
+        close();
+      } else if (it.href) {
+        window.location.href = it.href;
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        toggle();
+        return;
+      }
+      if (wrap.classList.contains('hidden')) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        active = Math.min(filtered.length - 1, active + 1);
+        render();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        active = Math.max(0, active - 1);
+        render();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (filtered[active]) execute(filtered[active]);
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        input.focus(); /* simple focus trap */
+      }
+    });
+    input.addEventListener('input', function (e) {
+      filter(e.target.value);
+    });
+    if (trigger) trigger.addEventListener('click', open);
+    const closeEl = wrap.querySelector('[data-cmdk-close]');
+    if (closeEl) closeEl.addEventListener('click', close);
+  })();
+</script>

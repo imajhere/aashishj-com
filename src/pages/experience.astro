@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ChapterCard from '../components/ChapterCard.astro';
+import Placeholder from '../components/Placeholder.astro';
+
+// Eight career chapters in chronological order. Per the original spec.
+// All chapter summaries are TODO placeholders; Aashish will replace.
+const chapters = [
+  {
+    ordinal: 'I',
+    years: '2010 — 2013',
+    location: 'Hyderabad',
+    org: 'Tech Mahindra',
+    title: 'Software Engineer',
+  },
+  {
+    ordinal: 'II',
+    years: '2010 — 2012',
+    location: 'Hyderabad · Concurrent',
+    org: 'Microsoft Student Partner',
+    title: 'Campus Dev Evangelist',
+  },
+  {
+    ordinal: 'III',
+    years: '2014 — 2016',
+    location: 'Columbia, MO',
+    org: 'University of Missouri',
+    title: 'MBA',
+  },
+  {
+    ordinal: 'IV',
+    years: '2016 — 2020',
+    location: 'New York City',
+    org: 'Adroit Associates · NYC Government',
+    title: 'Senior Consultant',
+  },
+  {
+    ordinal: 'V',
+    years: '2020 — present',
+    location: 'Frisco, TX',
+    org: 'Large management consulting firm · Platform',
+    title: 'Senior Product Manager',
+  },
+  {
+    ordinal: 'VI',
+    years: '2024 — present',
+    location: 'India',
+    org: '78 Labs',
+    title: 'Co-founder',
+  },
+  {
+    ordinal: 'VII',
+    years: '2025 — present',
+    location: 'New York City',
+    org: 'Team 78',
+    title: 'Principal',
+  },
+  {
+    ordinal: 'VIII',
+    years: '2025 — present',
+    location: 'Self-hosted · Mac Mini',
+    org: 'Brain System',
+    title: 'Personal AI memory',
+  },
+];
+---
+
+<BaseLayout
+  title="Experience — Aashish Jagini"
+  description="Aashish Jagini's career — fifteen years across engineering, NYC government IT, large-firm product, and side ventures."
+  current="experience"
+>
+  <main id="main">
+
+    <section class="min-h-[42vh] flex items-end pb-12">
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-20">
+        <p class="kicker">EXPERIENCE · EIGHT CHAPTERS · FIFTEEN YEARS</p>
+        <h1 class="h-display mt-6 text-[44px] sm:text-[60px] lg:text-[72px] max-w-[1100px]">
+          What I <em>shipped</em>, where, and what changed.
+        </h1>
+        <div class="mt-8 max-w-[640px]">
+          <Placeholder size="lg">
+            One paragraph per chapter. Aashish will rewrite each in his voice.
+            Each card has a collapsible "AI Context" expander reserved for
+            longer per-chapter material the future "Ask AI About Me" feature
+            will use to ground answers.
+          </Placeholder>
+        </div>
+      </div>
+    </section>
+
+    <hr class="editorial-rule" />
+
+    <section class="py-12">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10">
+        {
+          chapters.map((c) => (
+            <ChapterCard
+              ordinal={c.ordinal}
+              years={c.years}
+              location={c.location}
+              org={c.org}
+              title={c.title}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+  </main>
+</BaseLayout>
