@@ -16,8 +16,9 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
+        # Version is read from package.json's `packageManager` field
+        # (currently pnpm@9.15.0). Don't pass `version:` here — the
+        # action errors if both sources are present.
 
       - name: Setup Node
         uses: actions/setup-node@v4
