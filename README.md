@@ -2,7 +2,7 @@
 
 Personal site for Aashish Jagini, built on Astro + Tailwind, deployed to Cloudflare Pages.
 
-This is the **foundation pass** — six routes live, MDX-backed writing collection, design system locked, AI features deferred to pass 2.
+This is the **foundation pass** — five routes live, MDX-backed writing collection, design system locked. The original spec called for six routes (`/fit` was the sixth — a JD-paste UI stub for a future AI feature); on review Aashish cut it to avoid a "coming soon" credibility tax. The Brain System project page carries the AI flex on its own.
 
 ---
 
@@ -72,7 +72,6 @@ The build runs `astro check && astro build`, so `pnpm build` will fail on type e
 │   │   ├── experience.astro      # /experience
 │   │   ├── projects.astro        # /projects
 │   │   ├── skills.astro          # /skills (full 3-column grid)
-│   │   ├── fit.astro             # /fit (UI stub, no AI yet)
 │   │   └── writing/
 │   │       ├── index.astro
 │   │       └── [slug].astro
@@ -196,8 +195,7 @@ The site references `/og-default.png` from `BaseLayout.astro` for any page witho
 
 The AI features are intentionally NOT in this build:
 
-- **/fit AI logic.** The page ships as a UI stub with a "Tool launching soon" panel. The textarea and button are visually present but `disabled`. When the Cloudflare Worker is ready, wire the form to `POST /api/fit` running `@cf/meta/llama-3.1-70b-instruct` against a grounding doc built from `/experience` + `/projects` + `/skills`.
-- **"Ask AI About Me" chat.** Not on the homepage in this pass. The brand strategist's recommendation was to let the Brain System carry the AI flex and skip a chatbot widget — Aashish will revisit if/when there's a real reason for one.
+- **AI features (chat, JD-fit, etc.).** Cut from this pass entirely. No `/fit` route, no chatbot widget. The brand strategist's read prevailed — both are 2026 clichés that would dilute the "builder with taste" signal. The Brain System project page carries the AI flex on its own with real specifics (dated artifact, running tunnel, $0/mo cost). If a real AI feature lands later, it gets a new home — likely an "Ask AI about this chapter" expander on `/experience` or a homepage hero treatment — not a reserved-for-later route.
 - **Brain System live data.** The status block currently shows `[live]` placeholders. When ready, replace with a `fetch()` call to a public read-only endpoint on `brain.aashishj.com` (or pass through a Pages Function for header rewrites). The component (`<BrainStatus />`) is set up for this — just wire fetch + replace `<span class="ph-inline">[live]</span>` with the real values.
 - **Per-post OG image generation.** See "Regenerating OG images" above.
 - **Search across writing.** Skipped. When the post count crosses ~20, add Pagefind via `pnpm pagefind` post-build step.
