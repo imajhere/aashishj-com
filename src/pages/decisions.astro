@@ -9,22 +9,23 @@ import Placeholder from '../components/Placeholder.astro';
  * change my mind. Modeled on engineering ADRs (Architecture Decision Records)
  * but for product/career/site choices.
  *
- * Aashish will rewrite the bodies in his voice. Titles + dates + considered/
- * chose/revisit fields are real — they happened during the foundation pass.
+ * EDITORIAL RULE — DO NOT VIOLATE:
+ * A decision only earns a slot here if naming the alternatives doesn't
+ * leak anything Aashish would prefer not to surface. Decisions about
+ * masked employer, side businesses, or hidden context belong in a
+ * private notebook, not this public log. Test before adding: "If a
+ * recruiter reads this entry's 'Considered' field, do they learn
+ * something I deliberately hid elsewhere on the site?" If yes, cut it.
+ *
+ * Aashish will rewrite the bodies in his voice. Titles + dates +
+ * considered/chose/revisit fields are real — they happened during the
+ * foundation pass.
  *
  * To add a new entry: append to the `decisions` array below.
  * Sorted newest-first at render time.
  */
 
 const decisions = [
-  {
-    date: '2026-04-30',
-    title: 'Strip /projects back to Brain only',
-    considered: 'Keep all three (Brain + 78 Labs + Team 78). Wider portfolio surface, shows range.',
-    chose: 'Brain only. Side businesses fully invisible from this site.',
-    revisitIf: 'I separate "currently evaluating roles" from "currently building" — then maybe the side businesses earn a slot.',
-    placeholder: true,
-  },
   {
     date: '2026-04-30',
     title: 'Live Brain status: real numbers + date stamp',
