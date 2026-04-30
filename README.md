@@ -2,7 +2,9 @@
 
 Personal site for Aashish Jagini, built on Astro + Tailwind, deployed to Cloudflare Pages.
 
-This is the **foundation pass** — five routes live, MDX-backed writing collection, design system locked. The original spec called for six routes (`/fit` was the sixth — a JD-paste UI stub for a future AI feature); on review Aashish cut it to avoid a "coming soon" credibility tax. The Brain System project page carries the AI flex on its own.
+This is the **foundation pass** — six routes live, MDX-backed writing collection, design system locked. The original spec called for an AI fit-assessment route; on review Aashish cut it to avoid a "coming soon" credibility tax. The Brain System project page carries the AI flex on its own.
+
+> **Outstanding work** — placeholders, posts, polish, recurring tasks — is tracked in **[PENDING.md](./PENDING.md)**. Pick that up first when returning to this repo.
 
 ---
 
