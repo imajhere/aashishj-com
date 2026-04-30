@@ -1,33 +1,43 @@
 ---
 /**
- * BrainStatus.astro — the live status block (used on / and /projects).
+ * BrainStatus.astro — Brain server status block.
  *
- * Live values (memory, last capture, uptime) start as `[live]` placeholder
- * pills and stay that way until the production build wires the fetch
- * to brain.aashishj.com. Tunnel and Cost are real and stay.
+ * Reads from src/data/brain-status.json at build time. Values are refreshed
+ * manually via `pnpm refresh:brain` (which SSHs to the Mac Mini brain server,
+ * pulls real numbers, and writes them to the JSON file). The component
+ * displays the `tendedISO` date as a "Tended <date>" stamp so the freshness
+ * is honest — these are real values as of the last refresh, not fake live.
  *
- * Variant `homepage` sits inside the Brain editorial spread on /, with the
- * "BRAIN — APR 2026" eyebrow. Variant `project` is the wider treatment
- * used on /projects/#brain detail block.
+ * Variant `homepage` is the compact eyebrow ("BRAIN — APR 2026") block.
+ * Variant `project` is the wider treatment used on /projects#brain.
  */
+import status from '../data/brain-status.json';
+
 interface Props {
   variant?: 'homepage' | 'project';
 }
 
 const { variant = 'homepage' } = Astro.props;
-const heading = variant === 'homepage' ? 'BRAIN — APR 2026' : 'STATUS';
+
+// Format "tended" date as "APR 2026" for the homepage eyebrow,
+// or "Apr 30 2026" for the longer caption on /projects.
+const tendedDate = new Date(status.tendedISO);
+const tendedShort = tendedDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase();
+const tendedLong = tendedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const heading = variant === 'homepage' ? `BRAIN — ${tendedShort}` : 'STATUS';
+const memoryFmt = status.memoryCount.toLocaleString('en-US') + ' docs';
 ---
 
 <div class="border-t border-line pt-6">
   <h3 class="kicker mb-4">{heading}</h3>
   <dl class="mono text-[12px] leading-[1.7] text-muted space-y-2">
-    <div class="flex justify-between"><dt>Memory</dt><dd><span class="ph-inline">[live]</span></dd></div>
-    <div class="flex justify-between"><dt>Last capture</dt><dd><span class="ph-inline">[live]</span></dd></div>
-    <div class="flex justify-between"><dt>Uptime</dt><dd><span class="ph-inline">[live]</span></dd></div>
-    <div class="flex justify-between"><dt>Tunnel</dt><dd class="text-ink">brain.aashishj.com</dd></div>
-    <div class="flex justify-between"><dt>Cost</dt><dd class="text-ink">$0/mo</dd></div>
-    {variant === 'project' && (
-      <div class="flex justify-between"><dt>Version</dt><dd class="text-ink">v2.4.1</dd></div>
-    )}
+    <div class="flex justify-between"><dt>Memory</dt><dd class="text-ink">{memoryFmt}</dd></div>
+    <div class="flex justify-between"><dt>Last capture</dt><dd class="text-ink">{status.lastCaptureLabel}</dd></div>
+    <div class="flex justify-between"><dt>Running since</dt><dd class="text-ink">{status.runningSince}</dd></div>
+    <div class="flex justify-between"><dt>Tunnel</dt><dd class="text-ink">{status.tunnel}</dd></div>
+    <div class="flex justify-between"><dt>Cost</dt><dd class="text-ink">{status.costPerMonth}/mo</dd></div>
   </dl>
+  <p class="mt-3 text-[10px] mono uppercase tracking-[0.14em] text-muted">
+    Tended {tendedLong}
+  </p>
 </div>

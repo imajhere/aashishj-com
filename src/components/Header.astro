@@ -7,7 +7,7 @@
  * Otherwise it sits at the top of the page with a hairline border.
  */
 interface Props {
-  current?: 'home' | 'experience' | 'projects' | 'skills' | 'writing';
+  current?: 'home' | 'experience' | 'projects' | 'skills' | 'writing' | 'decisions';
   floating?: boolean;
 }
 
@@ -18,6 +18,7 @@ const navItems = [
   { href: '/projects/', label: 'Projects', id: 'projects' },
   { href: '/skills/', label: 'Skills', id: 'skills' },
   { href: '/writing/', label: 'Writing', id: 'writing' },
+  { href: '/decisions/', label: 'Decisions', id: 'decisions' },
 ];
 
 const positionClass = floating

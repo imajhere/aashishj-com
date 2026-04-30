@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import BrainStatus from '../components/BrainStatus.astro';
 import Placeholder from '../components/Placeholder.astro';
 
@@ -19,7 +18,7 @@ const brainSchema = {
 
 <BaseLayout
   title="Projects — Aashish Jagini"
-  description="Brain System, 78 Labs, and Team 78 — what I'm building."
+  description="Brain — a self-hosted personal AI memory server. The thing on my desk."
   current="projects"
   schema={brainSchema}
 >
@@ -27,16 +26,16 @@ const brainSchema = {
 
     <section class="min-h-[34vh] flex items-end pb-10">
       <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-20">
-        <p class="kicker">PROJECTS · WHAT I'M BUILDING</p>
+        <p class="kicker">PROJECTS · ONE THING I CARE ABOUT</p>
         <h1 class="h-display mt-6 text-[40px] sm:text-[56px] lg:text-[64px] max-w-[1100px]">
-          Tools and ventures, <em>three</em> of each kind.
+          What I'm <em>building</em>.
         </h1>
       </div>
     </section>
 
     <hr class="editorial-rule" />
 
-    <!-- Brain System — gets a wider treatment with live status sidebar -->
+    <!-- Brain System — wider treatment with live status sidebar -->
     <section id="brain" class="py-20">
       <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-8 lg:gap-12">
 
@@ -94,45 +93,16 @@ const brainSchema = {
 
     <hr class="editorial-rule" />
 
-    <!-- 78 Labs -->
-    <ProjectCard
-      ordinal="II"
-      years="2024 — present"
-      location="India · DTC"
-      status="Shipping"
-      title="78 Labs"
-      tagline="— anhydrous mineral sunscreen"
-      anchor="78-labs"
-      link="https://78labs.in"
-      linkLabel="Visit 78labs.in"
-    >
-      <Placeholder slot="body" size="lg">
-        Co-founded with my wife. The product story, formulation lock, and launch
-        notes go here. Aashish will write.
-      </Placeholder>
-      <Placeholder slot="pull" size="sm" italic>
-        SHIPPED · [WHAT] · BUILDING · A BRAND THAT'S OURS.
-      </Placeholder>
-    </ProjectCard>
-
-    <!-- Team 78 -->
-    <ProjectCard
-      ordinal="III"
-      years="2025 — present"
-      location="NYC · Gov-tech"
-      status="Building"
-      title="Team 78"
-      tagline="— MWBE-certified consulting"
-      anchor="team-78"
-    >
-      <Placeholder slot="body" size="lg">
-        MWBE-certified gov-tech consulting practice. Built on a decade of NYC
-        agency relationships. Aashish will write.
-      </Placeholder>
-      <Placeholder slot="pull" size="sm" italic>
-        SHIPPED · [WHAT] · DEFINITION OF SUCCESS · IT NEVER NEEDS A TEAM.
-      </Placeholder>
-    </ProjectCard>
+    <section class="py-20 bg-cream">
+      <div class="max-w-[1240px] mx-auto px-6 lg:px-10">
+        <p class="kicker">A note on this page</p>
+        <div class="mt-6 max-w-[680px]">
+          <Placeholder size="lg" italic>
+            One project, listed deliberately. If a single tool I use every day is the only one that earns a writeup, the bar feels right.
+          </Placeholder>
+        </div>
+      </div>
+    </section>
 
   </main>
 </BaseLayout>

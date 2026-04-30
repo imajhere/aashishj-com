@@ -10,7 +10,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "refresh:brain": "bash scripts/refresh-brain.sh"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
