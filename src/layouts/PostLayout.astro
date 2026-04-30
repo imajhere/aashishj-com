@@ -16,7 +16,7 @@ interface Props {
 
 const { post, readingMinutes } = Astro.props;
 const { title, description, pubDate, updatedDate, tags, ogImage } = post.data;
-const canonical = `https://aashishj.com/writing/${post.slug}`;
+const canonical = `https://aashishj.com/writing/${post.slug}/`;
 
 const fmtFull = (d: Date) =>
   d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });

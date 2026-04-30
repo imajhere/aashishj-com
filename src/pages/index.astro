@@ -69,7 +69,7 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
           <div>
             <div class="kicker mb-1">Email</div>
             <div class="ui">
-              <a class="linky" href="mailto:aashish@aashishj.com">aashish@aashishj.com</a>
+              <a class="linky" href="mailto:imajhere@gmail.com">imajhere@gmail.com</a>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
 
           <div class="mt-12 flex flex-wrap gap-4">
             <a
-              href="/projects#brain"
+              href="/projects/#brain"
               class="ui inline-flex items-center gap-2 text-[14px] border-b border-burnt text-burnt pb-1 hover:opacity-70 transition"
               data-astro-prefetch
             >
@@ -161,7 +161,7 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
                 What I'm <em>writing</em> about.
               </h2>
             </div>
-            <a href="/writing" class="ui text-[13.5px] text-muted hover:text-burnt transition" data-astro-prefetch>
+            <a href="/writing/" class="ui text-[13.5px] text-muted hover:text-burnt transition" data-astro-prefetch>
               All writing →
             </a>
           </div>
@@ -170,7 +170,7 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
             {
               recentPosts.map((post, i) => (
                 <a
-                  href={`/writing/${post.slug}`}
+                  href={`/writing/${post.slug}/`}
                   class="mag-row"
                   style={i === recentPosts.length - 1 ? 'border-bottom: 1px solid rgb(var(--rgb-line))' : undefined}
                   data-astro-prefetch
@@ -241,7 +241,7 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
 
           <div class="mt-12">
             <a
-              href="/skills"
+              href="/skills/"
               class="linky ui text-[15px]"
               data-astro-prefetch
             >
@@ -273,7 +273,7 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
 
           <div class="mt-8">
             <Placeholder size="lg">
-              I'm always up for conversations with PMs and operators building on top of LLMs. The best way to reach me is <a class="linky" href="mailto:aashish@aashishj.com">aashish@aashishj.com</a>.
+              I'm always up for conversations with PMs and operators building on top of LLMs. The best way to reach me is <a class="linky" href="mailto:imajhere@gmail.com">imajhere@gmail.com</a>.
             </Placeholder>
           </div>
         </div>

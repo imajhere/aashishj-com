@@ -53,7 +53,7 @@ const fmt = (d: Date) =>
           <div class="max-w-[920px]">
             {posts.map((post, i) => (
               <a
-                href={`/writing/${post.slug}`}
+                href={`/writing/${post.slug}/`}
                 class="mag-row"
                 style={i === posts.length - 1 ? 'border-bottom: 1px solid rgb(var(--rgb-line))' : undefined}
                 data-astro-prefetch
@@ -77,7 +77,7 @@ const fmt = (d: Date) =>
             <ul class="ui text-[14px] space-y-2">
               {allDraftPosts.map((p) => (
                 <li>
-                  <a href={`/writing/${p.slug}`} class="linky">
+                  <a href={`/writing/${p.slug}/`} class="linky">
                     /writing/{p.slug}
                   </a>
                   <span class="text-muted"> — {p.data.title}</span>

@@ -8,7 +8,10 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   site: 'https://aashishj.com',
   output: 'static',
-  trailingSlash: 'never',
+  // Trailing slash 'always' matches Cloudflare Workers Static Assets'
+  // default behavior — `/experience` would 307→`/experience/` otherwise.
+  // Keeping the slashes avoids a redirect on every internal click.
+  trailingSlash: 'always',
   build: {
     format: 'directory',
   },

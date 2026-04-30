@@ -114,14 +114,22 @@ a.linky {
 }
 a.linky:hover { color: var(--burnt-c); border-bottom-color: var(--burnt-c); }
 
-/* Magazine-style writing row */
+/* Magazine-style writing row.
+   Date column widened to 140px so "APR 29 · 12 MIN"-length kickers don't
+   overflow under the title. Drops to 1fr title behavior on narrow screens. */
 .mag-row {
   display: grid;
-  grid-template-columns: 92px 1fr auto;
+  grid-template-columns: 140px 1fr auto;
   gap: 28px;
   align-items: baseline;
   padding: 22px 0;
   border-top: 1px solid var(--line-c);
+}
+@media (max-width: 640px) {
+  .mag-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
 .mag-row:hover .mag-title { color: var(--burnt-c); }
 .mag-row .mag-title {
