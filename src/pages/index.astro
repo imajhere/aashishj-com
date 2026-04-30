@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Placeholder from '../components/Placeholder.astro';
 import BrainStatus from '../components/BrainStatus.astro';
+import brainStatus from '../data/brain-status.json';
 import { getCollection } from 'astro:content';
 
 // Two most recent published-or-draft posts for the writing block
@@ -13,6 +14,23 @@ const recentPosts = allPosts
 const fmtDate = (d: Date) =>
   d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
 const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
+
+// ---- Hero stats strip values ----
+// BRAIN cell: real memory count from brain-status.json (manually refreshed
+// via `pnpm refresh:brain`).
+const brainLabel = `${brainStatus.memoryCount.toLocaleString('en-US')} docs`;
+
+// WRITING cell: computed from the writing collection at build time.
+const publishedCount = allPosts.filter((p) => !p.data.draft).length;
+const draftCount = allPosts.filter((p) => p.data.draft).length;
+const writingLabel =
+  publishedCount > 0 && draftCount > 0
+    ? `${publishedCount} essays · ${draftCount} drafting`
+    : publishedCount > 0
+    ? `${publishedCount} ${publishedCount === 1 ? 'essay' : 'essays'}`
+    : draftCount > 0
+    ? `${draftCount} in draft`
+    : 'soon';
 ---
 
 <BaseLayout
@@ -26,9 +44,10 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
 
     <!-- ============================================================
          HERO. Employer masked. Subhead is body copy → Placeholder.
-         Stats strip: DAY (real), BRAIN ([live]), WRITING ([live]),
-         EMAIL (real). No green dot on BRAIN — value is placeholder
-         per the polish item; dot would imply liveness.
+         Stats strip: DAY (real), BRAIN (from brain-status.json),
+         WRITING (computed from collection at build), EMAIL (real).
+         No green dot on BRAIN — values are static at build, not live.
+         Refresh Brain numbers via `pnpm refresh:brain`.
          ============================================================ -->
     <section class="min-h-[88vh] flex flex-col justify-between" aria-labelledby="hero-h">
       <div class="flex-1 flex items-center">
@@ -58,13 +77,11 @@ const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
           </div>
           <div>
             <div class="kicker mb-1">Brain</div>
-            <div class="ui">
-              <span class="ph-inline">[live]</span>
-            </div>
+            <div class="ui">{brainLabel}</div>
           </div>
           <div>
             <div class="kicker mb-1">Writing</div>
-            <div class="ui"><span class="ph-inline">[live]</span></div>
+            <div class="ui">{writingLabel}</div>
           </div>
           <div>
             <div class="kicker mb-1">Email</div>
