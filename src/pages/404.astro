@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 — Aashish Jagini"
+  description="Page not found."
+>
+  <main id="main">
+    <section class="min-h-[70vh] flex items-center">
+      <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-32 pb-20">
+        <p class="kicker">404 · NOT FOUND</p>
+        <h1 class="h-display mt-6 text-[44px] sm:text-[60px] lg:text-[72px] max-w-[900px]">
+          That <em>page</em> doesn't exist.
+        </h1>
+        <p class="mt-8 text-[19px] text-muted max-w-[640px] leading-[1.65]">
+          The link is wrong, or I moved something. Try one of these:
+        </p>
+        <ul class="mt-6 ui text-[15px] space-y-2">
+          <li><a href="/" class="linky">Home</a></li>
+          <li><a href="/experience" class="linky">Experience</a></li>
+          <li><a href="/projects" class="linky">Projects</a></li>
+          <li><a href="/skills" class="linky">Skills</a></li>
+          <li><a href="/writing" class="linky">Writing</a></li>
+        </ul>
+        <p class="mt-12 text-[15px] text-muted">
+          Or email <a class="linky" href="mailto:aashish@aashishj.com">aashish@aashishj.com</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
