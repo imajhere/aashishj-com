@@ -189,10 +189,10 @@ const backups = [
 // § 13 of Overview for the deferred TODO.)
 // ============================================================
 const recentChanges = [
-  { date: '2026-04-30', title: 'Monitoring + cleanup session', detail: 'BetterStack live (5 monitors + heartbeat). UptimeRobot retired. ntfy → HA push. 8 LaunchAgents archived. Doc updates throughout.' },
-  { date: '2026-04-30', title: 'doc-sweep OneDrive FileProvider hardening (Gate D)', detail: 'Path-cache fast-path + /bin/cp staging + deferred-list retry. weekly → daily. Verified: 2,494 files, 0 errno 11.' },
-  { date: '2026-04-30', title: 'Brain SQLite hardening Gates A-C', detail: 'busy_timeout, autocheckpoint, transaction rollback, watcher self-heal, daily checkpoint, NAS off-site backup, restore drill.' },
-  { date: '2026-04-30', title: 'rishithajagini.com shipped', detail: 'Astro 5 + CF Pages, custom domain, redirect rules. For Rishitha’s senior PM job hunt.' },
+  { date: '2026-04-30', title: 'A5 + C6 done in parallel', detail: 'A5: Obsidian backup mmap deadlock fix (Gate D pattern, 122 previously-dropped files now in mirror). C6: HA index regen, event-driven (5 runs/day vs 144) via HA automation_reloaded → SSH → regen.' },
+  { date: '2026-04-30', title: 'aashishj.com/status live (this page)', detail: 'Astro + Cloudflare Workers Static Assets + Worker auth (HTTP Basic Auth). CI deploys via wrangler-action with run_worker_first=true.' },
+  { date: '2026-04-30', title: 'BetterStack monitoring + ntfy → HA push', detail: '6 monitors + heartbeat. UptimeRobot retired. 8 LaunchAgents archived. Doc-sweep notifications via HA push.' },
+  { date: '2026-04-30', title: 'Brain Gates A-D', detail: 'SQLite hardening (busy_timeout + checkpoint + rollback + watcher self-heal). Doc-sweep OneDrive deadlock fixed: 2,494 files, 0 errno 11. Brain DB NAS off-site + restore drill.' },
 ];
 
 // BetterStack public status page URL — embedded as iframe at top of page.
