@@ -151,16 +151,17 @@ const dailyJobs = [
   { time: '04:30', job: 'com.brain.checkpoint', what: 'PRAGMA wal_checkpoint(TRUNCATE) on vectors.db (Gate B)' },
   { time: '05:00', job: 'com.brain.backup-db', what: 'sqlite3 .backup vectors.db → ~/Backups/brain-db/ (keep 7)' },
   { time: '06:00', job: 'com.aashish.brain-db-nas-backup', what: 'rsync ~/Backups/brain-db/ → NAS (Gate C, off-site)' },
+  { time: '03:00', job: 'com.aashish.ha-index', what: 'Daily safety-net regen of HA System Index. Primary trigger is event-driven — see Interval jobs.' },
 ];
 
 const intervalJobs = [
   { interval: 'Hourly', job: 'Time Machine', what: 'macOS → NAS DriveSync · rotates automatically' },
   { interval: 'Hourly', job: 'com.aashish.karakeep-snapshot', what: 'Karakeep SQLite → local rolling 24' },
-  { interval: 'Every 2h', job: 'com.aashish.obsidian-backup', what: 'rsync vault → git mirror → GitHub + NAS' },
+  { interval: 'Every 2h', job: 'com.aashish.obsidian-backup', what: 'rsync vault → git mirror → GitHub + NAS (A5: /bin/cp staging)' },
   { interval: 'Every 2h', job: 'com.aashish.ha-backup', what: 'SSH rsync HA config → GitHub' },
-  { interval: 'Every 10 min', job: 'com.aashish.ha-index', what: 'Regenerate HA System Index → vault' },
+  { interval: 'Event-driven', job: 'HA index regen (via HA automation)', what: 'HA fires automation_reloaded → SSH → ha-index-regen.py (C6, ~5 runs/day vs prior 144)' },
   { interval: 'Every 4h', job: 'infra-healthcheck.sh', what: 'Cron: probe services → HA push if any down + BetterStack heartbeat' },
-  { interval: 'Every 3 min', job: 'BetterStack', what: 'External: probe 5 sites + receive heartbeat' },
+  { interval: 'Every 3 min', job: 'BetterStack', what: 'External: probe 6 sites + receive heartbeat' },
   { interval: 'Continuous', job: 'com.brain.watcher', what: 'File-system watch → incremental reindex' },
 ];
 
