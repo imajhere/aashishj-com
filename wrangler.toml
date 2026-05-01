@@ -18,3 +18,9 @@ binding = "ASSETS"
 # 404 fallback: when a path isn't found, serve dist/404.html if it exists,
 # otherwise the platform default 404. Astro emits its own 404 page on build.
 not_found_handling = "404-page"
+# Run the Worker on EVERY request, even when the path matches a static asset.
+# Without this, Cloudflare serves matching assets directly from cache and the
+# Worker never sees the request — which silently bypasses our /status auth.
+# The Worker is responsible for calling env.ASSETS.fetch(request) to delegate
+# back to static serving for non-/status paths (it does).
+run_worker_first = true
