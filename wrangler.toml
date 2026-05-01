@@ -1,20 +1,19 @@
 # Cloudflare Workers + Static Assets configuration.
 #
-# Deploys the Astro `dist/` directory as a Workers Static Assets site,
-# with a thin Worker (src/worker/index.ts) running in front to gate
-# the /status* paths behind HTTP Basic Auth.
+# Deploys the Astro `dist/` directory as a Workers Static Assets site.
+# Astro's `build.format: 'directory'` output (with `/experience/index.html`,
+# `/projects/index.html`, etc.) is handled natively by Workers' default
+# directory-index lookup — no rewrites needed.
 #
-# All other paths fall through to static assets unchanged. The auth
-# secret lives as a Cloudflare secret (NOT in this file): set it once
-# via `wrangler secret put STATUS_PASSWORD` or in the dashboard.
+# When AI features land in pass 2, add `main = "src/worker/index.ts"`
+# alongside the inline Worker code. The static site will keep serving
+# from dist/ while the Worker handles dynamic routes (e.g., /api/fit).
 
 name = "aashishj-com"
 compatibility_date = "2026-04-30"
-main = "src/worker/index.ts"
 
 [assets]
 directory = "./dist"
-binding = "ASSETS"
 # 404 fallback: when a path isn't found, serve dist/404.html if it exists,
 # otherwise the platform default 404. Astro emits its own 404 page on build.
 not_found_handling = "404-page"
