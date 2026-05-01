@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Typecheck + Build
+    name: Typecheck + Build + Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -16,9 +16,7 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        # Version is read from package.json's `packageManager` field
-        # (currently pnpm@9.15.0). Don't pass `version:` here — the
-        # action errors if both sources are present.
+        # Version is read from package.json's `packageManager` field.
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -42,3 +40,14 @@ jobs:
           name: dist-${{ github.sha }}
           path: dist/
           retention-days: 7
+
+      # Deploy to Cloudflare Workers via wrangler. Picks up `main` field in
+      # wrangler.toml so the auth Worker bundles + uploads alongside dist/.
+      # Requires repo secrets: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID.
+      - name: Deploy to Cloudflare (main push only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: pnpm
