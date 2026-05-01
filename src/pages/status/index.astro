@@ -181,8 +181,12 @@ const backups = [
 ];
 
 // ============================================================
-// Recent change log — last 4 entries from § 16 (manually mirrored,
-// will auto-fetch in v2).
+// Recent change log — last 4 entries from Infrastructure Overview
+// § 16 (MANUALLY MIRRORED). When you add a row to § 16 in Obsidian
+// and it's important enough to surface on this page, also update
+// the array below + push aashishj-com to redeploy.
+// (If this drift starts to bite, build the v2.5 auto-render — see
+// § 13 of Overview for the deferred TODO.)
 // ============================================================
 const recentChanges = [
   { date: '2026-04-30', title: 'Monitoring + cleanup session', detail: 'BetterStack live (5 monitors + heartbeat). UptimeRobot retired. ntfy → HA push. 8 LaunchAgents archived. Doc updates throughout.' },
@@ -191,10 +195,10 @@ const recentChanges = [
   { date: '2026-04-30', title: 'rishithajagini.com shipped', detail: 'Astro 5 + CF Pages, custom domain, redirect rules. For Rishitha’s senior PM job hunt.' },
 ];
 
-// REPLACE THIS with your BetterStack public status page URL.
-// Find in BetterStack → Status pages → click yours → copy public URL.
-// If left as null, the iframe section shows a placeholder.
-const betterStackStatusUrl: string | null = null;
+// BetterStack public status page URL — embedded as iframe at top of page.
+// Set 2026-04-30. To rotate / replace: BetterStack → Status pages →
+// click the page → copy public URL → paste here → push.
+const betterStackStatusUrl: string | null = 'https://jagini.betteruptime.com/';
 ---
 
 <StatusLayout
