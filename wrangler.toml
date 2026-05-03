@@ -1,26 +1,14 @@
-# Cloudflare Workers + Static Assets configuration.
-#
-# Deploys the Astro `dist/` directory as a Workers Static Assets site,
-# with a thin Worker (src/worker/index.ts) running in front to gate
-# the /status* paths behind HTTP Basic Auth.
-#
-# All other paths fall through to static assets unchanged. The auth
-# secret lives as a Cloudflare secret (NOT in this file): set it once
-# via `wrangler secret put STATUS_PASSWORD` or in the dashboard.
+# Cloudflare Workers Static Assets configuration.
+# Deploys the Astro `dist/` directory as a static site. No Worker.
+# To add a Worker later (Pass 2 AI features), add `main = "src/worker/..."` and
+# `binding = "ASSETS"` back. Note: `run_worker_first = true` was silently ignored
+# by CF edge cache for asset paths — do not rely on it for auth gating.
 
 name = "aashishj-com"
 compatibility_date = "2026-04-30"
-main = "src/worker/index.ts"
 
 [assets]
 directory = "./dist"
-binding = "ASSETS"
 # 404 fallback: when a path isn't found, serve dist/404.html if it exists,
 # otherwise the platform default 404. Astro emits its own 404 page on build.
 not_found_handling = "404-page"
-# Run the Worker on EVERY request, even when the path matches a static asset.
-# Without this, Cloudflare serves matching assets directly from cache and the
-# Worker never sees the request — which silently bypasses our /status auth.
-# The Worker is responsible for calling env.ASSETS.fetch(request) to delegate
-# back to static serving for non-/status paths (it does).
-run_worker_first = true
