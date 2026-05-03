@@ -68,7 +68,7 @@ const services = [
     where: 'Mac Mini · com.brain.watcher',
     runtime: 'Python · watchdog PollingObserver',
     purpose: 'File-change incremental reindex of Obsidian vault',
-    monitor: 'infra-healthcheck.sh: alerts if vectors.db mtime > 6h stale',
+    monitor: 'infra-healthcheck.sh: alerts if ~/.brain-watcher-tick heartbeat > 5 min stale (replaced mtime check 2026-05-03)',
   },
   {
     name: 'Doc-sweep',
