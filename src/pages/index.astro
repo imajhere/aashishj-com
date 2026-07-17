@@ -44,13 +44,13 @@ const writingLabel =
 >
   <main id="main">
 
-    <!-- ============================================================
+    {/* ============================================================
          HERO. Employer masked. Subhead is body copy → Placeholder.
          Stats strip: DAY (real), BRAIN (from brain-status.json),
          WRITING (computed from collection at build), EMAIL (real).
          No green dot on BRAIN — values are static at build, not live.
          Refresh Brain numbers via `pnpm refresh:brain`.
-         ============================================================ -->
+         ============================================================ */}
     <section class="min-h-[88vh] flex flex-col justify-between" aria-labelledby="hero-h">
       <div class="flex-1 flex items-center">
         <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-32">
@@ -99,10 +99,10 @@ const writingLabel =
       </div>
     </section>
 
-    <!-- ============================================================
+    {/* ============================================================
          SECTION I — Brain. "BRAIN — APR 2026" eyebrow lives inside
          <BrainStatus />. Body copy + pull-quote wrapped as placeholders.
-         ============================================================ -->
+         ============================================================ */}
     <hr class="editorial-rule" />
     <section class="brain-bg min-h-[84vh] flex items-center" aria-labelledby="brain-h">
       <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 py-32 grid grid-cols-12 gap-10 lg:gap-16">
@@ -153,11 +153,11 @@ const writingLabel =
       </div>
     </section>
 
-    <!-- ============================================================
+    {/* ============================================================
          SECTION II — Recent writing. Two seed posts. Tags placeholder.
          Descriptions pulled from MDX frontmatter and wrapped in
          Placeholder by <PostCard>.
-         ============================================================ -->
+         ============================================================ */}
     <hr class="editorial-rule" />
     <section class="py-32" aria-labelledby="wri-h">
       <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-10 lg:gap-16">
@@ -213,13 +213,13 @@ const writingLabel =
       </div>
     </section>
 
-    <!-- ============================================================
+    {/* ============================================================
          SECTION III — Skills (HOMEPAGE: two columns + link to /skills).
          Per Aashish's sign-off: Strong + Moderate only here; full
          three-column grid (incl. Gaps) lives at /skills. The
          "What I'm honest about not knowing →" link is what makes
          the section II headline's second sentence land.
-         ============================================================ -->
+         ============================================================ */}
     <hr class="editorial-rule" />
     <section class="py-32 bg-cream" aria-labelledby="sk-h">
       <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-10 lg:gap-16">
@@ -270,11 +270,11 @@ const writingLabel =
       </div>
     </section>
 
-    <!-- ============================================================
+    {/* ============================================================
          SECTION IV — Reach out. Demoted, single short paragraph.
          No two-column structure. No "reply within a week" line.
          Last content section before the footer.
-         ============================================================ -->
+         ============================================================ */}
     <hr class="editorial-rule" />
     <section class="py-28" aria-labelledby="reach-h">
       <div class="max-w-[1240px] mx-auto px-6 lg:px-10 grid grid-cols-12 gap-10 lg:gap-16">

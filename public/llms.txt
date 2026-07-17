@@ -1,0 +1,27 @@
+# Aashish Jagini
+
+> Engineer-turned-product-manager in Frisco, TX. Senior PM at McKinsey & Company on an internal platform team — shipped the firm's first production GenAI agents. Builds and runs Brain, a self-hosted AI memory server ($0/month) that his AI tools read through MCP. Writes about PM craft, GenAI measurement, and AI tooling.
+
+Contact: imajhere@gmail.com
+GitHub: https://github.com/imajhere
+LinkedIn: https://www.linkedin.com/in/aashishjagini
+
+## Pages
+
+- [Experience](https://aashishj.com/experience/): Fifteen-year career — Tech Mahindra engineer, Microsoft Student Partner, MBA (University of Missouri), NYC government tech delivery ($25M+ won work), Senior PM at McKinsey, Brain System.
+- [Skills](https://aashishj.com/skills/): Strong / Moderate / Gaps — including an honest list of what he doesn't do.
+- [Writing](https://aashishj.com/writing/): All essays.
+
+## Essays
+
+- [I Built a PM Operating System in One Afternoon](https://aashishj.com/writing/pm-os/): Managing 30–50 things across five product areas with an AI-assisted operating layer.
+- [My AI Bot Kept Telling People to Go Away](https://aashishj.com/writing/ai-bot-deflection/): Measuring GenAI, part 1 — deflection bugs and trusting decision-time logs over replay.
+- [The $22-a-Month Sentiment Pipeline](https://aashishj.com/writing/sentiment-pipeline/): Measuring GenAI, part 2 — LLM quality classification as a SQL column.
+- [Your AI Metric Is Meaningless Without a Benchmark](https://aashishj.com/writing/ai-metric-benchmark/): Measuring GenAI, part 3 — sourcing the yardstick is the real work.
+- [Separate Measurement From Interpretation](https://aashishj.com/writing/measurement-vs-interpretation/): Measuring GenAI, part 4 — one canonical surface for evidence.
+- [The Best Infrastructure Is No Infrastructure](https://aashishj.com/writing/no-infrastructure/): Replacing a lying status pipeline with one config entry.
+- [Your AI Doesn't Need a Data Dump — It Needs the Right Queries](https://aashishj.com/writing/right-queries-not-data-dump/): Targeted live queries over CSV exports.
+- [The Most Expensive Line of Code Is a Hardcoded Path](https://aashishj.com/writing/hardcoded-path/): The one-line habit that keeps internal tools portable.
+- [Stop Re-Explaining Yourself to Your AI — Write It a Rule](https://aashishj.com/writing/write-your-ai-a-rule/): Repeated feedback is a missing rule.
+- [Exec Feedback Is a Symptom, Not a Spec](https://aashishj.com/writing/exec-feedback-symptom/): Translating "this feels off" into a shrinking decision.
+- [I Built a Second Brain That Actually Talks Back](https://aashishj.com/writing/brain-system/): The Brain System — self-hosted AI memory, $0/month, searchable by every AI tool via MCP.

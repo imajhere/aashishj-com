@@ -54,6 +54,23 @@ const personGraph = {
       familyName: 'Jagini',
       url: 'https://aashishj.com',
       email: 'imajhere@gmail.com',
+      jobTitle: 'Senior Product Manager',
+      worksFor: {
+        '@type': 'Organization',
+        name: 'McKinsey & Company',
+      },
+      alumniOf: {
+        '@type': 'CollegeOrUniversity',
+        name: 'University of Missouri',
+      },
+      knowsAbout: [
+        'Product Management',
+        'Generative AI',
+        'Model Context Protocol (MCP)',
+        'Retrieval-Augmented Generation',
+        'AI product measurement',
+        'Enterprise platform products',
+      ],
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Frisco',
@@ -88,7 +105,7 @@ const personGraph = {
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- OG / Twitter -->
+    {/* OG / Twitter */}
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -102,13 +119,13 @@ const personGraph = {
     )}
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- JSON-LD: Person + ProfilePage on every page (entity graph) -->
+    {/* JSON-LD: Person + ProfilePage on every page (entity graph) */}
     <script is:inline type="application/ld+json" set:html={JSON.stringify(personGraph)} />
 
-    <!-- Page-level schema if provided -->
+    {/* Page-level schema if provided */}
     {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
-    <!-- Theme: read stored preference before paint to avoid FOUC -->
+    {/* Theme: read stored preference before paint to avoid FOUC */}
     <script is:inline>
       (function () {
         try {
@@ -134,7 +151,7 @@ const personGraph = {
 
     <CommandPalette />
 
-    <!-- Theme toggle wiring (works with the inline pre-paint script above) -->
+    {/* Theme toggle wiring (works with the inline pre-paint script above) */}
     <script is:inline>
       (function () {
         const root = document.documentElement;
