@@ -3,7 +3,129 @@ title: "I Built a Second Brain That Actually Talks Back"
 description: "A self-hosted personal AI memory server, $0/month, that every AI tool I use can search."
 pubDate: 2026-04-29
 tags: ["ai", "infrastructure", "mcp"]
-draft: true
+draft: false
 ---
 
-> TODO: paste full draft from personal archive.
+Every AI tool I use — Claude, ChatGPT, Cursor — starts each conversation with amnesia. I tell Claude about my health goals on Monday, and by Wednesday it's forgotten everything. I paste the same context into a new tool for the third time this week. My notes live in Obsidian, my AI conversations vanish into the void, and the connective tissue between them doesn't exist.
+
+So I built my own fix: a personal knowledge server that sits on a Mac Mini in my home office, indexes everything I write, and gives every AI tool I use access to my memory.
+
+This is how it works, what I learned, and why it costs me $0/month to run.
+
+## The problem: smart tools, zero memory
+
+Here's what my workflow looked like before. I'd have a great conversation with Claude about tax planning. Two days later I'd start a new chat on the same topic and re-explain my entire financial situation. My Obsidian vault had the notes, but Claude couldn't see them. Neither could anything else. Nothing was connected.
+
+The core issue: **AI tools are stateless, but my life isn't.**
+
+I needed a system where every AI tool could search my notes, conversations could be captured back into my knowledge base, it worked from my phone and my laptop and any AI app, and I wasn't locked into one vendor's ecosystem.
+
+## The architecture: a Mac Mini, SQLite, and a tunnel
+
+The whole system runs on a Mac Mini that's always on at home. Here's what lives on it.
+
+**The Brain server** — a FastAPI app that exposes my knowledge base over HTTPS via [Model Context Protocol (MCP)](https://modelcontextprotocol.io). MCP is an open standard that lets AI assistants connect to external tools. Think of it as a USB port for AI: any tool that supports MCP can plug in and search my notes, save new ones, or read existing files.
+
+**The search engine** — this is where it gets interesting. I didn't just do keyword search. I built a hybrid retrieval system:
+
+1. Keyword search via SQLite FTS5 (full-text search)
+2. Semantic search via vector embeddings (`BAAI/bge-base-en-v1.5`)
+3. Reciprocal Rank Fusion to merge results from both
+4. Cross-encoder reranking (`ms-marco-MiniLM-L6-v2`) to re-score the top candidates
+
+Why hybrid? Because keyword search finds exact matches ("Cerebras API key") while semantic search finds conceptual ones ("that cloud inference service I use"). RRF combines both ranked lists, and the cross-encoder picks the best results from the merged set.
+
+**The tunnel** — Cloudflare Tunnel (`cloudflared`) gives the Mac Mini a public HTTPS URL (`brain.aashishj.com`) without opening any ports on my router. Secure, zero-config, free.
+
+**The source of truth** — Obsidian. Every note lives as a plain markdown file. The Brain server indexes these files but never modifies them unless asked through the MCP tools. Obsidian stays the UI for browsing and editing.
+
+## How search actually works
+
+When I ask Claude "what's my skincare routine?", here's what happens under the hood:
+
+1. Claude calls `search_memory` on my Brain server via MCP
+2. The server runs the query through two parallel paths — FTS5 keyword search across all indexed chunks, and vector similarity search against the embeddings
+3. Results from both paths are merged using Reciprocal Rank Fusion, a simple formula that rewards items ranked highly by either method
+4. The top ~20 candidates are re-scored by a cross-encoder that reads the full query and chunk text together
+5. The best five results come back to Claude with their source file paths
+
+The whole process takes about 200–400ms. The embedding model and cross-encoder both run on Apple Silicon (MPS), so there's no API latency for the search itself.
+
+## Auto-tagging: making dumb notes smarter
+
+Here's a problem I didn't anticipate: my notes don't have consistent tags or metadata. Some files are meticulously organized. Others are brain dumps with no structure.
+
+The fix: auto-tagging with Cerebras Llama 3.1 8B. During indexing, every note gets sent to Cerebras's free API, which returns 3–5 topic tags per section. These tags get stored alongside the chunks in the search index, boosting retrieval quality.
+
+```
+Note: "Daily Health Protocol.md"
+Tags: {"Morning Routine": "supplement-stack, morning-protocol, vitamin-d",
+       "Evening Routine": "sleep-hygiene, magnesium, wind-down"}
+```
+
+The fun part: this almost didn't work. I first tried Google Gemini's free tier but hit a bizarre quota issue where my limit was literally zero requests. I switched to Cerebras, hit a Cloudflare 1010 block because Python's `urllib` default user agent gets flagged, then Llama started returning JSON with trailing text that broke `json.loads()`. Three bugs, three fixes, one afternoon.
+
+The lesson: free APIs are free for a reason, but if you're willing to debug edge cases, they're incredibly powerful for personal projects.
+
+## The MCP toolkit
+
+The Brain server exposes eight tools via MCP that any connected AI can call:
+
+| Tool | What it does |
+|------|-------------|
+| `search_memory` | Hybrid search across all notes |
+| `capture_thought` | Save a new note to the vault |
+| `read_note` | Read any existing note by path |
+| `update_note` | Modify an existing note |
+| `list_folder` | Browse vault structure |
+| `save_image` | Store images shared in chats |
+| `browse_recent` | Get recently modified notes |
+| `get_stats` | Dashboard of vault metrics |
+
+The `capture_thought` tool has a neat feature: soft deduplication. Before saving, it runs a quick search. If something very similar already exists, it includes those matches in the response so the AI can decide whether to merge or create a new note.
+
+## What a day looks like
+
+**Morning** — I open Claude on my phone and ask, "What's on my health protocol for today?" Claude calls `search_memory`, finds my Daily Health Protocol note, and gives me a summary. No copy-pasting, no digging through folders.
+
+**During work** — I'm in Cursor coding and ask it to check my Brain reference doc for an API endpoint format. It calls `read_note` and pulls the exact section I need. The context stays in my conversation without me hunting for it.
+
+**Random thought at lunch** — I tell Claude about a restaurant recommendation. It calls `capture_thought`, and a new note appears in my `Captures/` folder in Obsidian. I can refine it later or leave it.
+
+**Evening** — I open Obsidian on my iPad and browse everything captured that day. The file watcher on the Mac Mini picks up my edits and re-indexes within seconds.
+
+## The numbers
+
+| Component | Cost | Why |
+|-----------|------|-----|
+| Mac Mini | $0/mo | Already owned, always on |
+| Cloudflare Tunnel | $0/mo | Free tier |
+| Cerebras API | $0/mo | Free tier (Llama 3.1 8B) |
+| Obsidian | $0/mo | Local app |
+| Embedding model | $0/mo | Runs locally on Apple Silicon |
+| Cross-encoder | $0/mo | Runs locally on Apple Silicon |
+| **Total** | **$0/mo** | |
+
+The whole index — the full vault plus thousands of OCR'd documents and their embeddings — is a single SQLite database that sits comfortably under 100 MB. Search queries return in 200–400ms, note capture in well under a second.
+
+## What I'd do differently
+
+**Start with retrieval quality, not architecture.** I spent time on the server setup before validating that hybrid search actually outperformed simple keyword search for my use case. It does — but I should have proved that first.
+
+**Prompt engineering for auto-tagging matters more than the model.** Llama 3.1 8B produces great tags with a tight prompt. The model choice mattered less than I expected; the prompt structure — explicit JSON format, concrete examples, negative constraints — mattered more.
+
+**iCloud Drive is quirky.** Files sometimes show up as "data vaults" or throw `Resource deadlock avoided` errors during indexing. The fix is defensive code wrapping every filesystem touch. Not elegant, but reliable.
+
+## Should you build this?
+
+Honestly, only if you meet two conditions. First, you already take notes regularly — this system amplifies an existing habit; if you don't have notes to index, there's nothing to search. Second, you use multiple AI tools — if you're all-in on one platform, its built-in memory might be enough. The value of MCP is that it's vendor-neutral: one server, every AI tool.
+
+If both apply, the setup takes an afternoon and the stack is entirely free. The code is straightforward Python — FastAPI, SQLite, and a couple of HuggingFace models. No Kubernetes, no cloud bills. Just a Mac Mini doing its thing in the corner of a home office.
+
+## What's next
+
+Since the initial build I've shipped a few additions. An auto-OCR pipeline now sweeps every PDF and image in my OneDrive archive, extracts text via Apple Vision OCR, generates metadata with a local Llama model through Ollama, and makes every scanned document searchable — files stay where I put them; the system indexes, never moves. There's a small web UI with login for search, capture, stats, and triggering sweeps; a Raycast extension for natural-language search from any app; and ntfy push notifications after each document sweep completes.
+
+Still on the list: automated daily digests of everything captured, and conversation threading to link related captures into chains. But the current setup already changed how I use AI. The friction of re-explaining context is gone, my notes are alive in every conversation, and the Mac Mini just sits there, quietly remembering everything.
+
+*The key ingredients, if you want to build your own: FastAPI + MCP for the server, SQLite FTS5 + sqlite-vec for hybrid search, any sentence-transformer model for embeddings, Cloudflare Tunnel for access, and Obsidian (or any markdown editor) as the UI. The whole thing is about 2,500 lines of Python.*

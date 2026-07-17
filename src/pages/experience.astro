@@ -1,90 +1,91 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ChapterCard from '../components/ChapterCard.astro';
-import Placeholder from '../components/Placeholder.astro';
 
-// Eight career chapters in chronological order. Per the original spec.
-// All chapter summaries are TODO placeholders; Aashish will replace.
+// Six career chapters, reverse-chronological (most recent first).
 const chapters = [
   {
     ordinal: 'I',
-    years: '2010 — 2013',
-    location: 'Hyderabad',
-    org: 'Tech Mahindra',
-    title: 'Software Engineer',
+    years: '2020 — present',
+    location: 'Frisco, TX',
+    org: 'McKinsey & Company · Platform',
+    title: 'Senior Product Manager',
+    summary:
+      "Today I own a portfolio of enterprise products at McKinsey — an internal app and asset marketplace, GenAI knowledge assistants, a GenAI support agent, and a service-health dashboard — across two engineering squads and an offshore vendor team. I shipped McKinsey's first production GenAI support agent; it worked well enough that other flagship internal teams asked for it, and it spread to five-plus channels in months. I set the 12–18 month roadmap for the marketplace against an ROI model worth 8,000–12,000 hours a year, grew it 29% year over year to 11,800+ active integrations, and scaled a knowledge assistant to 500+ weekly users at ~82% automated resolution. I also built the answer-quality evaluation the org didn't have — turning “is the AI any good?” from an argument into a tracked signal leadership steers by.",
+    pull: 'SHIPPED · <strong>McKinsey’s first production GenAI agents</strong> · LEARNED · <strong>one PM + an AI operating model = director-level surface area</strong>',
   },
   {
     ordinal: 'II',
-    years: '2010 — 2012',
-    location: 'Hyderabad · Concurrent',
-    org: 'Microsoft Student Partner',
-    title: 'Campus Dev Evangelist',
-  },
-  {
-    ordinal: 'III',
-    years: '2014 — 2016',
-    location: 'Columbia, MO',
-    org: 'University of Missouri',
-    title: 'MBA',
-  },
-  {
-    ordinal: 'IV',
-    years: '2016 — 2020',
-    location: 'New York City',
-    org: 'Adroit Associates · NYC Government',
-    title: 'Senior Consultant',
-  },
-  {
-    ordinal: 'V',
-    years: '2020 — present',
-    location: 'Frisco, TX',
-    org: 'Large management consulting firm · Platform',
-    title: 'Senior Product Manager',
-  },
-  {
-    ordinal: 'VI',
-    years: '2024 — present',
-    location: 'India',
-    org: '78 Labs',
-    title: 'Co-founder',
-  },
-  {
-    ordinal: 'VII',
-    years: '2025 — present',
-    location: 'New York City',
-    org: 'Team 78',
-    title: 'Principal',
-  },
-  {
-    ordinal: 'VIII',
     years: '2025 — present',
     location: 'Self-hosted · Mac Mini',
     org: 'Brain System',
     title: 'Personal AI memory',
+    summary:
+      'The most-used thing I’ve built isn’t at work — it’s on a Mac Mini in my home office. Brain is a small, self-hosted memory server: hybrid search over my Obsidian vault and 2,400+ OCR’d documents, exposed through MCP so every AI tool I use reads from the same memory. No agent framework, no $400/month vector DB. Just hybrid search done right, for $0 a month. It’s the clearest proof of how I think about AI tooling: own your context, keep it boring, make it useful every single day.',
+    pull: 'SHIPPED · <strong>a memory my AI tools read daily</strong> · $0/mo · LEARNED · <strong>the cheapest edge is context you own</strong>',
+  },
+  {
+    ordinal: 'III',
+    years: '2016 — 2020',
+    location: 'New York City',
+    org: 'Adroit Associates · NYC Government',
+    title: 'Product Manager / Business Analyst',
+    summary:
+      'Four years delivering technology for New York City agencies — health, housing, youth services, consumer affairs, emergency management — end to end, from business case to cutover. I wrote proposals that won $25M+ in new work and built the process the firm used to decide which RFPs were worth chasing. Public-sector delivery is unforgiving: fixed budgets, real constituents, no room to hand-wave. It taught me to own the whole lifecycle, not just the fun part.',
+    pull: 'SHIPPED · <strong>$25M+ in won work across five city agencies</strong> · LEARNED · <strong>own it from business case to cutover</strong>',
+  },
+  {
+    ordinal: 'IV',
+    years: '2014 — 2016',
+    location: 'Columbia, MO',
+    org: 'University of Missouri',
+    title: 'MBA',
+    summary:
+      'The MBA was where the engineer learned the business half — and I didn’t just study it. I ran the agile process for the business school’s technology center and shipped internal web apps, drove donor analytics for fundraising, got elected to graduate student government (and grew department representation 30%), and TA’d a new-product marketing course. Two national case-competition finishes and Beta Gamma Sigma on the way out.',
+    pull: 'SHIPPED · <strong>internal apps + a student-gov win</strong> · LEARNED · <strong>product sense is built, not born</strong>',
+  },
+  {
+    ordinal: 'V',
+    years: '2011 — 2013',
+    location: 'Bangalore',
+    org: 'Tech Mahindra',
+    title: 'Software Engineer / Team Lead',
+    summary:
+      'I started as an engineer. At Tech Mahindra I led a small team through the kind of work that teaches you what “done” actually means — we held a multi-million-dollar British Telecom account by hitting a hard release with full test coverage and zero live defects. Six people, three cities, one deadline. It’s where I learned that shipping is a discipline, not an event.',
+    pull: 'SHIPPED · <strong>the release that saved the account</strong> · LEARNED · <strong>done means no surprises in production</strong>',
+  },
+  {
+    ordinal: 'VI',
+    years: '2010 — 2012',
+    location: 'Hyderabad · Concurrent',
+    org: 'Microsoft Student Partner',
+    title: 'Campus Dev Evangelist',
+    summary:
+      'Alongside my engineering degree, I ran developer workshops on campus as a Microsoft Student Partner — teaching other students to build on Microsoft’s stack. My first taste of the thing I still do: turning technical capability into something people will actually pick up and use.',
+    pull: 'SHIPPED · <strong>workshops that got students building</strong> · LEARNED · <strong>adoption is a teaching problem</strong>',
   },
 ];
 ---
 
 <BaseLayout
   title="Experience — Aashish Jagini"
-  description="Aashish Jagini's career — fifteen years across engineering, NYC government IT, large-firm product, and side ventures."
+  description="Aashish Jagini's career — fifteen years from engineering to NYC public-sector delivery to enterprise GenAI product management."
   current="experience"
 >
   <main id="main">
 
     <section class="min-h-[42vh] flex items-end pb-12">
       <div class="max-w-[1240px] mx-auto w-full px-6 lg:px-10 pt-20">
-        <p class="kicker">EXPERIENCE · EIGHT CHAPTERS · FIFTEEN YEARS</p>
+        <p class="kicker">EXPERIENCE · SIX CHAPTERS · FIFTEEN YEARS</p>
         <h1 class="h-display mt-6 text-[44px] sm:text-[60px] lg:text-[72px] max-w-[1100px]">
           What I <em>shipped</em>, where, and what changed.
         </h1>
         <div class="mt-8 max-w-[640px]">
-          <Placeholder size="lg">
-            One paragraph per chapter. Aashish will rewrite each in his voice.
-            Each card has a collapsible "AI Context" expander reserved for
-            longer per-chapter material the future "Ask AI About Me" feature
-            will use to ground answers.
-          </Placeholder>
+          <p class="text-[19px] leading-[1.7]">
+            Fifteen years, one through-line: an engineer who kept moving toward the seam
+            where technical judgment meets what a business actually needs. Here’s what I
+            shipped at each stop — and what each one taught me. Most recent first.
+          </p>
         </div>
       </div>
     </section>
@@ -101,6 +102,8 @@ const chapters = [
               location={c.location}
               org={c.org}
               title={c.title}
+              summary={c.summary}
+              pull={c.pull}
             />
           ))
         }

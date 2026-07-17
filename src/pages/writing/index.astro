@@ -1,16 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Placeholder from '../../components/Placeholder.astro';
 import { getCollection } from 'astro:content';
 
 // Show only published posts. Drafts (`draft: true`) remain reachable by direct
 // URL so Aashish can preview the layout, but they don't appear in the index.
 const posts = (await getCollection('writing'))
   .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const allDraftPosts = (await getCollection('writing'))
-  .filter((p) => p.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const fmt = (d: Date) =>
@@ -31,9 +26,9 @@ const fmt = (d: Date) =>
           What I'm <em>writing</em> about.
         </h1>
         <div class="mt-8 max-w-[640px]">
-          <Placeholder size="lg">
-            One paragraph of intro: how often I publish, what to expect, and where to find me writing elsewhere. Aashish will rewrite.
-          </Placeholder>
+          <p class="text-[19px] leading-[1.7]">
+            A few essays a year, no more — usually about PM craft, the AI tooling I actually use, and the small systems I build for myself. I'd rather publish something worth your time than something on a schedule.
+          </p>
         </div>
       </div>
     </section>
@@ -45,9 +40,9 @@ const fmt = (d: Date) =>
 
         {posts.length === 0 ? (
           <div class="max-w-[680px]">
-            <Placeholder size="lg">
-              No posts published yet. The two seed posts (<code class="ph-inline">pm-os</code> and <code class="ph-inline">brain-system</code>) are in draft. Set <code class="ph-inline">draft: false</code> in their frontmatter to publish them here.
-            </Placeholder>
+            <p class="text-[19px] leading-[1.7] text-muted italic">
+              Nothing published just yet — a couple of essays are in the works. Check back soon.
+            </p>
           </div>
         ) : (
           <div class="max-w-[920px]">
@@ -68,25 +63,6 @@ const fmt = (d: Date) =>
                 </span>
               </a>
             ))}
-          </div>
-        )}
-
-        {allDraftPosts.length > 0 && (
-          <div class="mt-16 max-w-[920px] border-t border-dashed border-line pt-10">
-            <p class="kicker mb-4">DRAFTS · NOT YET INDEXED · DIRECT URL ONLY</p>
-            <ul class="ui text-[14px] space-y-2">
-              {allDraftPosts.map((p) => (
-                <li>
-                  <a href={`/writing/${p.slug}/`} class="linky">
-                    /writing/{p.slug}
-                  </a>
-                  <span class="text-muted"> — {p.data.title}</span>
-                </li>
-              ))}
-            </ul>
-            <p class="mt-3 text-[12px] text-muted ui">
-              These are reachable for layout preview. They won't render here once <code class="ph-inline">draft: false</code> ships them above.
-            </p>
           </div>
         )}
 

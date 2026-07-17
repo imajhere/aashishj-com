@@ -36,7 +36,6 @@ const articleSchema = {
 
 // Pre-encoded share URLs
 const enc = encodeURIComponent;
-const shareTwitter = `https://twitter.com/intent/tweet?text=${enc(title)}&url=${enc(canonical)}&via=aashishjagini`;
 const shareLinkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${enc(canonical)}`;
 ---
 
@@ -85,7 +84,6 @@ const shareLinkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${enc
       <!-- Share links -->
       <div class="flex flex-wrap items-center gap-4 ui text-[13px]">
         <span class="kicker">Share</span>
-        <a href={shareTwitter} target="_blank" rel="noopener" class="linky">X</a>
         <a href={shareLinkedIn} target="_blank" rel="noopener" class="linky">LinkedIn</a>
         <button
           type="button"

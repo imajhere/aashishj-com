@@ -1,13 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Placeholder from '../components/Placeholder.astro';
 import BrainStatus from '../components/BrainStatus.astro';
 import brainStatus from '../data/brain-status.json';
 import { getCollection } from 'astro:content';
 
-// Two most recent published-or-draft posts for the writing block
+// Two most recent PUBLISHED posts for the writing block. Drafts (empty stubs)
+// are intentionally excluded so the homepage never links to an unfinished post.
 const allPosts = await getCollection('writing');
 const recentPosts = allPosts
+  .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 2);
 
@@ -35,7 +36,7 @@ const writingLabel =
 
 <BaseLayout
   title="Aashish Jagini — PM, builder, self-hosted AI memory"
-  description="Aashish Jagini — engineer who became a PM. PM on an internal platform team at a large management consulting firm. Self-hosted AI memory and a few essays a year about PM and AI tooling."
+  description="Aashish Jagini — engineer who became a PM. Senior PM at McKinsey building production GenAI products, with a self-hosted AI memory I use daily and a few essays a year on PM and AI tooling."
   current="home"
   floatingHeader={true}
   ogType="profile"
@@ -58,13 +59,13 @@ const writingLabel =
             id="hero-h"
             class="h-display fade-up d1 mt-4 text-[44px] sm:text-[64px] lg:text-[84px] max-w-[1100px]"
           >
-            PM at a large consulting firm. <em>Builder</em> of small things that ship.
+            PM at McKinsey. <em>Builder</em> of small things that ship.
           </h1>
 
           <div class="fade-up d2 mt-10 max-w-[640px]">
-            <Placeholder size="lg">
-              Aashish Jagini — engineer who became a PM. PM on an internal platform team at a large management consulting firm. I built a self-hosted AI memory I use daily, and I write a few essays a year about PM and AI tooling.
-            </Placeholder>
+            <p class="text-[19px] leading-[1.7]">
+              I'm Aashish — an engineer who became a PM. At McKinsey I own a portfolio of enterprise products and shipped the firm's first production GenAI agents. On the side I build small things that ship: a self-hosted AI memory I use every day, and a few essays a year on PM and AI tooling.
+            </p>
           </div>
         </div>
       </div>
@@ -120,27 +121,21 @@ const writingLabel =
           </h2>
 
           <div class="mt-10 max-w-[620px] space-y-4">
-            <Placeholder size="lg">
-              As of April 2026, Aashish runs Brain — a self-hosted memory server on a Mac Mini. Hybrid search over an Obsidian vault and 2,400+ OCR'd PDFs, using <span class="mono text-[16px]">SQLite FTS5</span> with vector embeddings, reranked. Every AI tool he uses (Claude, Cursor, ChatGPT) reads from it through MCP. It costs $0 a month.
-            </Placeholder>
-            <Placeholder size="lg" italic>
+            <p class="text-[19px] leading-[1.7]">
+              Brain is a self-hosted memory server running on a Mac Mini in my home office. It runs hybrid search over my Obsidian vault and 2,400+ OCR'd PDFs — <span class="mono text-[16px]">SQLite FTS5</span> plus vector embeddings, reranked — and every AI tool I use (Claude, Cursor, ChatGPT) reads from it through MCP. It costs $0 a month.
+            </p>
+            <p class="text-[19px] leading-[1.7] italic">
               The bet: in 2026, the cheapest edge is a memory your AI tools can search. I built mine. It costs nothing.
-            </Placeholder>
+            </p>
           </div>
 
           <div class="mt-12 flex flex-wrap gap-4">
             <a
-              href="/projects/#brain"
+              href="/writing/brain-system/"
               class="ui inline-flex items-center gap-2 text-[14px] border-b border-burnt text-burnt pb-1 hover:opacity-70 transition"
               data-astro-prefetch
             >
               Read the technical writeup <span aria-hidden="true">→</span>
-            </a>
-            <a
-              href="#"
-              class="ui inline-flex items-center gap-2 text-[14px] border-b border-line pb-1 hover:border-burnt hover:text-burnt transition"
-            >
-              MCP integration notes
             </a>
           </div>
         </div>
@@ -148,9 +143,9 @@ const writingLabel =
         <aside class="col-span-12 lg:col-span-4 lg:pt-10" aria-labelledby="brain-status-h">
           <BrainStatus variant="homepage" />
           <div class="mt-8">
-            <Placeholder size="sm" italic>
+            <p class="text-[15px] leading-[1.6] italic text-muted">
               Boring on purpose. The cleverness is that there is nothing clever — no agent framework, no $400/month vector DB. Just hybrid search done right.
-            </Placeholder>
+            </p>
           </div>
         </aside>
 
@@ -184,6 +179,11 @@ const writingLabel =
           </div>
 
           <div class="mt-16 max-w-[920px]">
+            {recentPosts.length === 0 && (
+              <p class="text-[17px] leading-[1.6] text-muted italic">
+                A couple of essays are in the works — they’ll show up here soon.
+              </p>
+            )}
             {
               recentPosts.map((post, i) => (
                 <a
@@ -198,11 +198,11 @@ const writingLabel =
                   <span>
                     <span class="mag-title block">{post.data.title}</span>
                     <div class="mt-2">
-                      <Placeholder size="sm">{post.data.description}</Placeholder>
+                      <p class="text-[15px] leading-[1.6] text-muted">{post.data.description}</p>
                     </div>
                   </span>
                   <span class="ui text-[11px] uppercase tracking-[.14em] text-muted hidden sm:inline">
-                    <span class="ph-inline">[tags]</span>
+                    {post.data.tags[0]}
                   </span>
                 </a>
               ))
@@ -289,9 +289,9 @@ const writingLabel =
           </h2>
 
           <div class="mt-8">
-            <Placeholder size="lg">
+            <p class="text-[19px] leading-[1.7]">
               I'm always up for conversations with PMs and operators building on top of LLMs. The best way to reach me is <a class="linky" href="mailto:imajhere@gmail.com">imajhere@gmail.com</a>.
-            </Placeholder>
+            </p>
           </div>
         </div>
       </div>
