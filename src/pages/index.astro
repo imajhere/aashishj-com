@@ -13,8 +13,9 @@ const recentPosts = allPosts
   .slice(0, 2);
 
 const fmtDate = (d: Date) =>
-  d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
-const readingTime = (slug: string) => (slug === 'pm-os' ? '8 min' : '12 min');
+  d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const readingTime = (post: (typeof recentPosts)[number]) =>
+  `${Math.max(1, Math.round(post.body.split(/\s+/).filter(Boolean).length / 200))} min`;
 
 // ---- Hero stats strip values ----
 // BRAIN cell: real memory count from brain-status.json (manually refreshed
@@ -193,7 +194,7 @@ const writingLabel =
                   data-astro-prefetch
                 >
                   <span class="kicker whitespace-nowrap">
-                    {fmtDate(post.data.pubDate)} · {readingTime(post.slug)}
+                    {fmtDate(post.data.pubDate)} · {readingTime(post)}
                   </span>
                   <span>
                     <span class="mag-title block">{post.data.title}</span>

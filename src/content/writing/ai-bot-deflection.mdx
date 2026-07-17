@@ -1,0 +1,111 @@
+---
+title: "My AI Bot Kept Telling People to Go Away"
+description: "Finding the bug was easy. Proving I'd fixed it nearly fooled me — a lesson in trusting decision-time logs over replay."
+pubDate: 2026-07-14
+tags: ["genai", "product-management", "measuring-genai"]
+draft: false
+---
+
+> **Measuring GenAI · Part 1 of 4.** How I check whether the AI products I ship actually help people. Next → [The $22/Month Sentiment Pipeline](/writing/sentiment-pipeline/).
+
+We had a helpful little AI bot living in a support chat channel. Someone would ask a question, and the bot would either answer it or say, politely, "I'm not sure — please file a support ticket."
+
+One day I got suspicious that it was saying "go file a ticket" way too often. It turned out I was right. But the surprising part of this story isn't the bug. It's that when I went to prove I'd fixed it, my own measurement almost fooled me into believing the fix didn't work.
+
+Here's the whole thing, in plain language. There's a lesson at the end that applies to a lot more than chatbots.
+
+## Meet the bot
+
+Picture a front-desk receptionist. You walk up, ask a question, and they have two options:
+
+1. **Answer you** — they look it up in the company handbook and tell you.
+2. **Send you away** — "I don't know, please open a ticket and someone will help."
+
+How does the bot decide? It has a **confidence score**. Every time it drafts an answer, it also rates how sure it is. If it's confident enough (above a set cutoff), it answers. If not, it sends you to file a ticket.
+
+That "send you away" move — I'll call it a **deflection** — is supposed to happen only when the bot genuinely can't help. That's the whole point of it.
+
+## The suspicion
+
+I had a nagging feeling the receptionist was being lazy — sending people off to file tickets even when it actually knew the answer perfectly well. If true, that's a terrible experience: you wait two days for a ticket to get a reply you could have had in two seconds.
+
+Feelings aren't evidence, though. So I measured it.
+
+## Step one: prove there's a problem
+
+I did something simple. I grabbed about 60 real past messages where the bot had deflected someone. Then I re-asked each of those exact questions to the AI and checked: *could it actually have answered this, with a confident, sourced reply?*
+
+The result was blunt:
+
+> About **68%** of the time the bot said "go file a ticket," it could have just answered the question.
+
+Roughly two out of every three deflections were wrong. That number is what turned my hunch into a green light to fix it. (This is a good habit in general: a specific number gets a fix prioritized in a way that "I feel like this is broken" never will.)
+
+## Step two: the fix
+
+The fix was conceptually easy. The old bot had a hidden rule: if a message *looked* like a technical incident report — it mentioned an error, a system name, that kind of thing — the bot would send you to file a ticket **no matter how confident it was.** It would literally throw away a great answer just because the message smelled like an incident.
+
+So we flipped its instinct from **"deflect first"** to **"answer first":** if the bot is confident, show the answer. If the message also looks like a real incident, just add a gentle footer — "if this is a service issue, you can also open a ticket so it gets tracked." You get the answer *and* the option, instead of a brush-off.
+
+Done. Ship it. Easy.
+
+Except now I had to prove it actually worked. And this is where it got interesting.
+
+## Step three: prove the fix worked (and nearly get it wrong)
+
+My first instinct was the obvious one: run the exact same test again. Grab fresh deflections from *after* the fix, re-ask them, and see if the false-deflection rate dropped from 68%.
+
+I did. It came back at **54%.**
+
+Better than 68%… but not clearly better. The margin of error was wide enough that, statistically, I couldn't say the fix had done anything. If I'd stopped there, I would have reported a deflating, and completely wrong, conclusion: "eh, the fix didn't really move the needle."
+
+Something felt off. So I asked myself a question I now think everyone should ask: **"What could be making this measurement lie to me?"**
+
+Two things were, and both are sneaky.
+
+### Lie #1: The AI kept changing under my feet
+
+Here's the trap. After the fix, the bot only deflects when its confidence was genuinely *low at that moment.* But I was re-asking those questions days or weeks later — and in the meantime the AI had been updated, its knowledge base had grown, and it has a bit of built-in randomness anyway.
+
+So about half of those questions now came back *confident*. My test counted that as a "gotcha — it could've answered!" But it wasn't a gotcha. The bot was right to be unsure *back then.* The AI just got smarter *since then.*
+
+> It's like re-taking a test months later — older, wiser, and this time with the textbook open — and then bragging that your *study technique* improved. You can't tell what actually caused the better score.
+
+Replaying a question doesn't reconstruct the decision the bot made in the past. It just tells you what the bot would do *today.* For anything that changes over time, those are two different questions.
+
+### Lie #2: "Can answer" is not "can solve"
+
+The second problem was subtler. A lot of those messages weren't really questions — they were live problems. "The system is down." "Please give me access to X."
+
+The AI would confidently pull up a relevant help document, so my test marked it "could've answered!" But **a document can't fix an outage.** I was quietly counting "found a related article" as "should have answered the user," which puffed up my numbers on both ends.
+
+This one generalizes hard: AI support tools constantly blur *having relevant information* with *actually resolving the problem.* They are not the same metric, and mixing them makes an AI look better or worse than it is.
+
+## The real answer: ask the bot what it was thinking *at the time*
+
+The fix for a lying measurement was to stop replaying the past and instead read what the bot *actually decided in the moment.*
+
+It turns out the bot writes down, for every single message, the two numbers that drove its decision: how confident it was, and the cutoff it was compared against. That's the honest record. No drift, no re-guessing, no randomness — just "here's exactly what I saw and what I did."
+
+One quick summary over about six weeks of that log told the story. Out of every 100 messages that looked ticket-worthy:
+
+- **Before the fix:** essentially all of them got deflected.
+- **After the fix:** about **64 to 70 now get a real answer**, and about **28 still correctly get sent to a ticket** — because those genuinely need a human.
+
+And here's the detail that made me trust it completely: that ~28% "still correctly deflected" almost exactly matched the ~29% of cases my very first test had flagged as "the bot genuinely couldn't answer these." Two completely different methods, months apart, landing on the same number. When that happens, you're probably looking at the truth.
+
+The ~68% that used to get thrown away? Now being answered. The fix worked — and worked almost exactly as well as the original problem was big.
+
+## Three lessons worth stealing
+
+**1. To learn what a system decided in the past, read its logs — don't re-run it.** If any part of a decision changes over time (an AI model, a dataset, anything with randomness), replaying it tells you what it would do *now,* not what it did *then.* Build your systems to record *why* they made each decision, at the moment they make it. If you can't answer "why did it do that, on this exact past case" from your logs alone, that's your real gap.
+
+**2. Be most suspicious of a measurement when it disagrees with a fix you believe in.** The 54% result was plausible enough to ship as "the answer." The only thing that saved me was refusing to accept a plausible-but-flat number and asking what could be corrupting it. A believable wrong answer is far more dangerous than an obviously broken one.
+
+**3. "Answerable" and "resolvable" are different things.** An AI confidently handing you the right document for "the server is on fire" is still useless in that moment. Any success metric that treats "found relevant info" as "solved the problem" is quietly lying to you.
+
+## The short version
+
+I thought my bot was deflecting too much. I measured it: 68% of deflections were unnecessary. I fixed it. Then I almost convinced myself the fix failed — because I tried to grade it by replaying old questions against an AI that had quietly changed underneath me. The honest answer was sitting in the bot's own decision logs the whole time.
+
+The fix was the easy part. Learning not to trust a convenient measurement was the part worth writing down.

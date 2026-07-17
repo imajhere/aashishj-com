@@ -1,0 +1,29 @@
+---
+title: "Your AI Doesn't Need a Data Dump — It Needs the Right Queries"
+description: "Rewiring a weekly report from a manual CSV export to targeted live queries made it faster, fully automated, and far more reliable."
+pubDate: 2026-06-08
+tags: ["mcp", "infrastructure", "boring-on-purpose"]
+draft: false
+---
+
+> **Boring on Purpose · Part 2 of 3.** Previous → [The Best Infrastructure Is No Infrastructure](/writing/no-infrastructure/). Next → [The Most Expensive Line of Code Is a Hardcoded Path](/writing/hardcoded-path/).
+
+I had a weekly analytics report that was mostly automated — except for the part where it wasn't. Every week I'd manually export a big CSV from our data warehouse, drop it in a folder, and then trigger an AI-assisted pipeline that read the file and wrote the report. The AI did the hard part. I was the flaky human step in the middle.
+
+The obvious "fix" is to automate the export. But that just moves the fragile step around. The better question was why the AI needed a giant file at all.
+
+## Give the model a warehouse, not a dump
+
+I connected my AI assistant directly to the data warehouse through [MCP](/writing/brain-system/) — the same open protocol I use to give my tools access to my notes. Now the assistant could query the source itself, live, instead of parsing whatever I'd exported by hand.
+
+The tempting first design was: have the AI pull *all* the rows and figure it out. That doesn't work, and it's worth understanding why. These conversation records have big text fields; dragging hundreds of rows of them through a tool call is slow, expensive, and often just too much for the model to reason over well. A data dump isn't context — it's noise you're paying to move.
+
+So I restructured the whole report around **targeted queries** instead. Rather than one giant pull, the pipeline now runs about eight small, purposeful ones: aggregates for the headline metrics, filtered pulls for the handful of rated messages that need quoting, pattern-matched queries for the deflection analysis. Each query answers one question the report actually asks.
+
+Same report. Same quality. Zero manual steps — and the AI reasons over clean, relevant slices instead of drowning in a CSV.
+
+## The principle
+
+It's easy to think of an AI assistant as something you feed. You have data, so you hand it all the data. But a model connected to a live source doesn't need to be fed — it needs to *ask good questions.* Aggregate first, pull detail only where the narrative genuinely needs it, and let the warehouse do what warehouses are good at.
+
+The shift is small but it changes the ergonomics completely: the report went from "reliable except for the human" to just reliable. And the design generalizes — anytime you're about to export a dump to feed an AI, check whether you could hand it the query engine instead. Right questions beat big files almost every time.

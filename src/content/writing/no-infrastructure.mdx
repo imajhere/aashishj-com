@@ -1,0 +1,37 @@
+---
+title: "The Best Infrastructure Is No Infrastructure"
+description: "I inherited a status page that lied through every outage. I fixed it by deleting the whole pipeline and replacing it with one config entry."
+pubDate: 2026-06-16
+tags: ["infrastructure", "engineering", "boring-on-purpose"]
+draft: false
+---
+
+> **Boring on Purpose · Part 1 of 3.** A short series on the engineering taste that makes systems quietly reliable. Next → [Your AI Doesn't Need a Data Dump](/writing/right-queries-not-data-dump/).
+
+I inherited a service-health dashboard — the public "is everything up?" page — and it had a quiet, embarrassing bug. During a real outage, it stayed green.
+
+## A pipeline that always said "fine"
+
+Under the hood was a respectable-looking little system: a web app running in the cloud, polling a monitoring platform every couple of minutes, translating the results into status updates. Except somewhere in that translation, the code hardcoded the answer to `operational` on every single call — regardless of what the monitoring actually said. It had no tests, stale documentation, and a health check that checked nothing. So when something broke, the page cheerfully reported that all was well.
+
+The obvious move was to fix the code: read the real status, map it correctly, add tests. I could have done that. It would have taken a while, and it would have left me owning a fragile pipeline forever.
+
+## Delete, don't fix
+
+Instead I asked a different question: does this pipeline need to exist at all?
+
+It didn't. The monitoring platform could already emit an event the instant something went wrong. The status page provider could already accept an incoming event and post an incident. The entire polling app in the middle — the servers, the translation code, the thing that was lying — existed only to shuttle data between two systems that could talk to each other directly.
+
+So I deleted it. In its place: **one configuration entry.** When the monitoring platform detects a problem, it now posts directly to the status page's incident interface. No app. No servers. No code to maintain, and nothing left to hardcode the wrong answer into.
+
+I validated the whole thing in a day — fired a test alert, watched an incident appear on the status page on its own — and the same config pattern extends to every product we monitor.
+
+## Push beats pull; deletion beats fixing
+
+Two lessons came out of this, and I keep reaching for both.
+
+The first is architectural: **push beats pull.** The old design polled — it woke up every two minutes and asked "anything wrong?" That's a whole category of failure modes (the poller dies, the interval is too slow, the translation drifts). An event-driven design just gets *told* the moment something changes. Fewer moving parts, fewer ways to be wrong.
+
+The second is a matter of taste: **the best infrastructure is no infrastructure.** The most reliable version of a component is the one that doesn't exist. Before you fix a broken system, it's worth asking whether the two things it connects could simply talk to each other — and whether your job is to repair the middleman or to remove him.
+
+It's not always possible. But it's asked far too rarely, and the payoff when the answer is "yes" is enormous: the code you delete never breaks, never needs patching, and never lies to your users during an outage.

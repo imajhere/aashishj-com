@@ -9,7 +9,7 @@ const posts = (await getCollection('writing'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+  d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 ---
 
 <BaseLayout

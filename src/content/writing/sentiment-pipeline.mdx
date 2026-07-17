@@ -1,0 +1,52 @@
+---
+title: "The $22-a-Month Sentiment Pipeline"
+description: "Adding LLM-powered quality measurement to an AI product — as a single SQL column, with no ML infrastructure — plus the taxonomy disaster in the middle."
+pubDate: 2026-07-10
+tags: ["genai", "product-management", "measuring-genai"]
+draft: false
+---
+
+> **Measuring GenAI · Part 2 of 4.** Previous → [My AI Bot Kept Telling People to Go Away](/writing/ai-bot-deflection/). Next → [Your AI Metric Is Meaningless Without a Benchmark](/writing/ai-metric-benchmark/).
+
+In the [last post](/writing/ai-bot-deflection/) I measured *one* thing about an AI assistant — whether it was deflecting people it should have helped. But the bigger question hangs over every GenAI product: across *all* those conversations, is the thing actually helping anyone? For a long time that was a debate, not a number. This is how I turned it into a number in a single morning, for about the price of a couple of coffees a week.
+
+## The old answer was "build an ML team"
+
+Not long ago, "classify the sentiment of every conversation with our AI" was a project. You'd need a model, somewhere to run it, a pipeline to feed it, and probably a data scientist to own it. The cost — in people and time — was high enough that most teams just didn't do it. They shipped the AI and argued about quality in meetings.
+
+That's over. Modern data warehouses now let you call a large language model *as a column in a SQL query.* You write a `SELECT`, add a function that runs an LLM against each row, and get a classification back. No cluster, no serving infrastructure, no ML team. The barrier to adding intelligence to your data has dropped to roughly zero.
+
+## Zero to a working classifier before lunch
+
+I pointed one of these functions at a sample of real conversation data and asked it to label each exchange — was the user's issue resolved, were they frustrated, what was it about. A few hundred conversations came back cleanly classified, with a confidence score on each, in one morning. From nothing to a validated proof of concept over a single coffee.
+
+The instinct at that point is to celebrate and ship. Don't. The interesting part was what broke next.
+
+## The taxonomy disaster
+
+I let the model return a free-text topic for each conversation — whatever it thought the subject was. Seemed flexible. It was a mistake.
+
+Across the full dataset, the model produced **thousands of distinct topics.** One common subject alone showed up under hundreds of slightly different spellings and phrasings. A dashboard built on that is useless — you can't chart four thousand categories, and no two of them mean quite the same thing.
+
+The fix is a rule I'd now apply from the start: **never let a model return an unbounded string where you need a category.** Force structured output — a fixed list of, say, a dozen-and-a-half buckets, and a response format the model must conform to. The moment I constrained it to a controlled taxonomy and required valid structured output, the thousands of topics collapsed into something a human could actually read, with zero nulls.
+
+## The number that looks scary until you frame it
+
+The classifier came back saying roughly **22% of conversations were "negative."**
+
+In a product review, "22% negative" sounds like a crisis. It isn't — as long as you know what the word means. In a *support* context, "negative" almost never means "the user hated us." It means "the user had a problem that wasn't fully resolved." That's not a satisfaction score; it's an **unresolved-conversation rate.** Rename it, and the same number stops triggering panic and starts pointing at real work.
+
+The framing matters even more when you break it down. Our asynchronous support surface had a higher unresolved rate than the self-serve one — which is exactly what you'd expect, because people bring harder, messier problems to a human-support channel than to a search box. Reported without that context, it looks like one surface is failing. Reported *with* it, it's a healthy, explainable gap.
+
+## Two speeds, on purpose
+
+The design that stuck was two-tier:
+
+- A **weekly pulse** — a couple of lines per surface, just enough to catch an anomaly. Is anything moving that shouldn't be?
+- A **monthly deep-dive** — the topic breakdown, the themes, the "what should we actually go fix." Heavier, slower, action-oriented.
+
+Mixing those speeds is what makes most dashboards confusing (more on that in [Part 4](/writing/measurement-vs-interpretation/)). Separating them keeps the fast signal fast and the slow analysis honest.
+
+## The takeaway
+
+Measuring an AI product used to be an infrastructure problem. Now it's a framing problem, and framing is the part that's actually hard. Adding the classifier is a `SELECT` statement and a few dollars a month at scale. Making the output *usable* means forcing structured categories from the start. Making it *trustworthy* means labeling "negative" as what it really is. The intelligence is cheap now. The judgment about what to do with it is the job.

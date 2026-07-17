@@ -1,0 +1,31 @@
+---
+title: "The Most Expensive Line of Code Is a Hardcoded Path"
+description: "A colleague's internal tool ran fine on his machine and crashed for everyone else. The cause — and the one-line habit that prevents it."
+pubDate: 2026-05-28
+tags: ["engineering", "developer-experience", "boring-on-purpose"]
+draft: false
+---
+
+> **Boring on Purpose · Part 3 of 3.** Previous → [Your AI Doesn't Need a Data Dump](/writing/right-queries-not-data-dump/). Start the series → [The Best Infrastructure Is No Infrastructure](/writing/no-infrastructure/).
+
+A senior colleague had built a genuinely useful internal tool — a set of sync scripts the rest of us were supposed to adopt. It ran beautifully on his machine. For everyone else, it crashed on the very first run, before doing anything at all.
+
+## "Works on my machine"
+
+The failure was a file-not-found at startup. The cause: 8 of the 11 scripts had the workspace directory written in as the author's exact personal path — something like the full absolute path to a folder that only existed on his laptop. On anyone else's machine, that path pointed at nothing, so the script died at preflight.
+
+The fix was one line per script. Instead of an absolute string, derive the workspace location *relative to where the script itself lives* — resolve it from the script's own file path at runtime. The author had actually already used that portable pattern in a couple of the scripts. He just never went back and applied it to the rest.
+
+What made it visible, finally, was someone running the tool on a different operating system than it was written on — which is exactly the kind of environment difference that turns a silent assumption into a crash.
+
+## The hidden tax
+
+Here's why I think of this as the most expensive kind of line. The fix is trivial — cheap to write, cheap to review. But the *bug* isn't cheap at all, because it doesn't cost the author anything. It costs everyone else. Every new teammate who clones the tool burns a fifteen-minute troubleshooting session hitting the same wall, until someone finally makes it portable. The price is paid over and over, by people who didn't write it, in a currency (their time) that never shows up on the author's ledger.
+
+"Works on my machine" almost always traces to an implicit assumption about the environment — a path, an environment variable, an installed dependency, an OS. The assumption is invisible to the person who made it precisely because it's true *for them.*
+
+## The habit
+
+So the habit is small and worth building in permanently: **never hardcode a path.** Derive locations relative to the code, read configuration from the environment, and assume from the start that your code will run somewhere that isn't your laptop. It costs you nothing today and saves every future teammate the same quarter-hour you'd otherwise tax them, one at a time.
+
+*(For what it's worth, I'm a PM — and this was a PM shipping the code fix. Reading and repairing this kind of thing is squarely in the job now.)*

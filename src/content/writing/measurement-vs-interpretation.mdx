@@ -1,0 +1,35 @@
+---
+title: "Separate Measurement From Interpretation"
+description: "The cleanest dashboards give numbers one home and meaning another — evidence and narrative should connect, not compete."
+pubDate: 2026-06-24
+tags: ["product-management", "analytics", "measuring-genai"]
+draft: false
+---
+
+> **Measuring GenAI · Part 4 of 4.** Previous → [Your AI Metric Is Meaningless Without a Benchmark](/writing/ai-metric-benchmark/). Start the series → [My AI Bot Kept Telling People to Go Away](/writing/ai-bot-deflection/).
+
+This series has been about getting AI-product numbers you can trust: [measure the real behavior](/writing/ai-bot-deflection/), [classify quality cheaply](/writing/sentiment-pipeline/), [anchor it to a credible benchmark](/writing/ai-metric-benchmark/). The last problem is the most boring and the most common: once you have all that, how do you *show* it without confusing everyone who looks?
+
+## The mistake I made first
+
+I was consolidating two dashboards for the same AI product into one. My first design put the live operational metrics on one tab — and then, on a separate "qualitative pulse" tab, repeated a weekly snapshot of some of those same metrics, because the narrative there needed numbers to lean on.
+
+It seemed helpful. It was confusing. Even with clear date labels, the two tabs showed overlapping metrics computed over *different windows* with *slightly different definitions.* Anyone reading both came away unsure which number was "the" number. I'd created two sources of truth for the same thing, which is the same as having none.
+
+## One canonical surface for evidence
+
+The fix is a rule I now treat as non-negotiable: **a dashboard needs exactly one canonical quantitative surface.** All the automated, measured evidence lives there, computed one way, over one set of windows. That's the number. There is no other number.
+
+Everything else is a *different question* and belongs on its own surface:
+
+- **What do the numbers mean?** — interpretation, context, the benchmark.
+- **What are users actually saying?** — themes, categorized feedback, representative quotes.
+- **What should we do about it?** — a short, curated list of priorities.
+
+None of those secondary surfaces should re-display the metrics under an alternate window. If they need a number, they *reference* the canonical one. And if you discover a metric that's genuinely missing, the answer is to add it to the canonical layer — never to quietly recreate it somewhere else with a different definition.
+
+## Measurement and interpretation should connect, not compete
+
+The deeper idea is that measurement and interpretation are two different jobs. Measurement is "here is exactly what happened, computed consistently." Interpretation is "here is what it means and what we should do." They absolutely need to link to each other — a good dashboard lets you move from a number to its meaning in one hop. But the moment they *compete* — two places both claiming to tell you the rate, over different windows — trust in the whole thing erodes.
+
+Give the numbers one home. Give meaning and action their own. Connect them with links, not with duplication. That's the difference between a dashboard people believe and one they quietly stop opening.

@@ -1,9 +1,56 @@
 ---
 title: "I Built a PM Operating System in One Afternoon"
-description: "Manage 30-50 things across five product areas without the fragmentation tax."
-pubDate: 2026-04-28
-tags: ["product-management", "ai", "tools"]
-draft: true
+description: "Managing 30–50 things across five product areas without the fragmentation tax — an AI-assisted operating layer that separates PM actions from team deliverables."
+pubDate: 2026-07-16
+tags: ["product-management", "ai", "mcp"]
+draft: false
 ---
 
-> TODO: paste full draft from personal archive.
+I run product for a portfolio — several distinct products, a couple of engineering squads, a vendor team. On a normal day I'm tracking somewhere between thirty and fifty live things: decisions waiting on me, follow-ups I owe someone, a stakeholder I need to nudge, a metric I want to check, a doc I promised to review.
+
+For a long time those things lived everywhere. Five Jira boards. A sprawl of Obsidian notes. Roadmap decks, goals docs, Slack threads, and the largest store of all — my own head. Every morning started with the same tax: reconstruct where everything stood before I could do anything with it.
+
+So one afternoon I built myself an operating system for the job. This is what it is, the one design decision that made it work, and why my teammates ended up wanting it too.
+
+## The problem wasn't too much work. It was too many surfaces.
+
+The instinct is to blame volume — too many tickets, too many meetings. But when I actually looked, the load wasn't the work itself. It was the *fragmentation*: the same forty items smeared across six tools, none of which agreed on what mattered today.
+
+The unlock was noticing that two very different kinds of thing were tangled together:
+
+- **Team deliverables** — the tickets, stories, and bugs my squads are shipping. These already have a home (Jira) and an owner (usually not me).
+- **PM actions** — the decisions, follow-ups, stakeholder outreach, and reviews that are *mine*. These had no home at all, so they lived in my head and leaked into every tool.
+
+Almost all of my stress came from the second category masquerading as the first. I was scanning Jira boards looking for *my* work, when my work was never really in Jira. Once I separated the two — a single surface for PM actions, with Jira demoted to a read-only health overlay — the cognitive overhead mostly evaporated.
+
+## The architecture
+
+The whole thing runs inside my code editor, of all places, because that's where I already talk to AI all day. The pieces:
+
+- **A command layer** — my AI assistant in Cursor, driving everything by conversation.
+- **[Brain](/writing/brain-system/)** — the self-hosted memory server I wrote about earlier, so the system reads from the same notes and context I already keep in Obsidian.
+- **MCP connections** — to Jira (read-only health), to a small local SQLite database that holds my PM actions, and to our analytics warehouse for metrics.
+- **A daily rule** — a written instruction the assistant follows every morning to assemble the same briefing the same way.
+
+No new SaaS. No new app to check. The surfaces I already live in, wired together.
+
+## What it actually does
+
+A few components carry most of the value:
+
+- **Focus Board** — my PM actions, priority-ranked and surfaced as a short list, not an infinite backlog. The rule enforces a *rule of three*: three things that actually matter today, everything else out of sight.
+- **Sprint Health** — a read-only cross-check against Jira. Not my to-do list; a glanceable "are the squads okay" overlay so I notice drift without living in the boards.
+- **Daily Context** — what carried over from yesterday, what moved, and what's coming in the next 48 hours. This is the "reconstruct the state of the world" tax, automated.
+- **Always-on capture** — a stray thought, a commitment I make in a meeting, a decision — I say it once and it lands in the right place, to refine later or leave as-is.
+
+It stays sustainable through a hybrid model: some things the system detects automatically, some it half-fills and I confirm, some I still enter by hand. I didn't try to automate everything — just to remove the re-typing and the re-remembering.
+
+## The part I didn't plan
+
+I built this for me. It scratched a specific, personal itch. Then I showed it to a few PMs and designers on the team — not as a pitch, just *"here's how I work now"* — and the reaction was immediate: everyone wanted it.
+
+That taught me something about internal tools. The best ones don't start as products; they start as somebody solving their own problem with enough rigor that it generalizes. The demo wasn't persuasion. It was just showing the work, and the demand showed up on its own.
+
+If you're a PM drowning in surfaces, you don't need another tool. You need to separate the work that's yours from the work that's your team's, give the first kind a single home, and let AI do the reconstruction you do by hand every morning. Mine took an afternoon. The time it's given back has paid for that a hundred times over.
+
+*This runs on the same [Brain memory server](/writing/brain-system/) I described earlier. If you're curious how I measure whether the AI products I ship at work actually help people, that's a [whole other series](/writing/ai-bot-deflection/).*

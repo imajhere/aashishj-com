@@ -27,3 +27,7 @@ pnpm-debug.log*
 
 # cloudflare
 .wrangler/
+
+# private planning docs (local only)
+PENDING.md
+CONTENT-PLAN.md

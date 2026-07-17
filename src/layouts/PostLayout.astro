@@ -19,7 +19,7 @@ const { title, description, pubDate, updatedDate, tags, ogImage } = post.data;
 const canonical = `https://aashishj.com/writing/${post.slug}/`;
 
 const fmtFull = (d: Date) =>
-  d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+  d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 const articleSchema = {
   '@context': 'https://schema.org',
