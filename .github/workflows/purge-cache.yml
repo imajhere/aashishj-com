@@ -1,0 +1,40 @@
+name: Purge Cloudflare cache after deploy
+
+# Runs on every push to main. Waits for Cloudflare Pages to pick up and
+# deploy the commit, then purges the zone cache so visitors (and crawlers)
+# get the new build immediately instead of waiting out the edge TTL.
+#
+# Requires two repo secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_ZONE_ID            — Cloudflare dashboard → aashishj.com → Overview, right column
+#   CLOUDFLARE_CACHE_PURGE_TOKEN  — dashboard → profile → API Tokens → Create Token
+#                                   → permission: Zone / Cache Purge / Purge, zone: aashishj.com
+#
+# If the secrets aren't set yet, the job logs a notice and exits green.
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Pages deploy
+        run: sleep 120
+
+      - name: Purge Cloudflare cache
+        env:
+          ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TOKEN: ${{ secrets.CLOUDFLARE_CACHE_PURGE_TOKEN }}
+        run: |
+          if [ -z "$ZONE_ID" ] || [ -z "$TOKEN" ]; then
+            echo "::notice::Cloudflare purge secrets not configured — skipping purge."
+            exit 0
+          fi
+          resp=$(curl -s -X POST \
+            "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}')
+          echo "$resp"
+          echo "$resp" | grep -q '"success":true' || exit 1
