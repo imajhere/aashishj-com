@@ -1,10 +1,10 @@
 {
   "$schema-comment": "Real Brain server values, refreshed manually via `pnpm refresh:brain`. Not fetched at runtime — baked at build time. The `tendedISO` field is the date of last refresh.",
-  "memoryCount": 2692,
-  "lastCaptureISO": "2026-07-10T08:00:50-05:00",
+  "memoryCount": 2774,
+  "lastCaptureISO": "2026-08-10T18:52:25-05:00",
   "lastCaptureLabel": "today",
   "runningSince": "2025",
   "tunnel": "brain.aashishj.com",
   "costPerMonth": "$0",
-  "tendedISO": "2026-07-10"
+  "tendedISO": "2026-08-10"
 }
