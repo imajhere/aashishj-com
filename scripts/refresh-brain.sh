@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 # scripts/refresh-brain.sh
 #
-# Pulls fresh values from the Mac Mini brain server and writes them to
+# Pulls fresh values from the Mac Mini brain index and writes them to
 # src/data/brain-status.json. Run from the repo root via `pnpm refresh:brain`.
 #
 # Requires:
 #   - SSH access to aj@192.168.1.168 with id_ed25519_github
-#   - Brain server running on the Mini at localhost:8742
+#   - ~/brain/vectors.db present on the Mini
 #   - jq installed locally (brew install jq)
 #
-# The brain access key never leaves the Mac Mini — we read it from the
-# launchd plist on the Mini and pass it inline to a curl that runs on the
-# Mini. No secrets touch this MacBook or the repo.
+# Reads straight from the vectors db over SSH — no brain-server API call and
+# no access key involved, so no secrets touch this MacBook or the repo.
 
 set -euo pipefail
 
@@ -22,14 +21,7 @@ SSH_KEY="$HOME/.ssh/id_ed25519_github"
 
 echo "→ pulling Brain status from Mac Mini…"
 
-# Run remotely: read access key from plist, hit /docs/stats, return JSON.
-STATS_JSON=$(ssh -o IdentitiesOnly=yes -i "$SSH_KEY" "$SSH_HOST" '
-  KEY=$(plutil -extract EnvironmentVariables.BRAIN_ACCESS_KEY raw \
-        ~/Library/LaunchAgents/com.brain.server.plist)
-  curl -s -H "x-brain-key: $KEY" http://localhost:8742/docs/stats
-')
-
-# Also pull unique-file count + last-capture from the vectors db.
+# Pull unique-file count + last-capture from the vectors db.
 EXTRA=$(ssh -o IdentitiesOnly=yes -i "$SSH_KEY" "$SSH_HOST" '
   COUNT=$(sqlite3 ~/brain/vectors.db "SELECT COUNT(DISTINCT file_path) FROM chunks;")
   LAST=$(sqlite3 ~/brain/vectors.db "SELECT datetime(MAX(embedded_at), \"unixepoch\") FROM chunks;")
@@ -41,9 +33,9 @@ LAST_RAW=$(echo "$EXTRA" | jq -r '.lastCaptureRaw')
 
 # Compute relative label (e.g., "4 days ago")
 DAYS_AGO=$(python3 -c "
-from datetime import datetime
-last = datetime.strptime('$LAST_RAW', '%Y-%m-%d %H:%M:%S')
-delta = (datetime.utcnow() - last).days
+from datetime import datetime, timezone
+last = datetime.strptime('$LAST_RAW', '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone.utc)
+delta = (datetime.now(timezone.utc) - last).days
 if delta == 0: print('today')
 elif delta == 1: print('yesterday')
 else: print(f'{delta} days ago')
